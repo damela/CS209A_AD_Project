@@ -10,97 +10,7 @@ notebook: EDA_combined.ipynb
 {: toc}
 
 
-## Final Project: Alzheimer's Disease and Cognitive Impairment Prediction
-
-
-**Harvard University**<br/>
-**Fall 2018**<br/>
-**Instructors**: Pavlos Protopapas, Kevin Rader
-
-**Team Members**: Zeo Liu, Connor Mccann, David Melancon
-
-<hr style="height:2pt">
-
-
-
-
-```python
-'''NOTEBOOK STYLE'''
-
-import requests
-from IPython.core.display import HTML
-styles = requests.get("https://raw.githubusercontent.com/Harvard-IACS/2018-CS109A/master/content/styles/cs109.css").text
-HTML(styles)
-```
-
-
-
-
-
-<style>
-blockquote { background: #AEDE94; }
-h1 { 
-    padding-top: 25px;
-    padding-bottom: 25px;
-    text-align: left; 
-    padding-left: 10px;
-    background-color: #DDDDDD; 
-    color: black;
-}
-h2 { 
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: left; 
-    padding-left: 5px;
-    background-color: #EEEEEE; 
-    color: black;
-}
-
-div.exercise {
-	background-color: #ffcccc;
-	border-color: #E9967A; 	
-	border-left: 5px solid #800080; 
-	padding: 0.5em;
-}
-div.theme {
-	background-color: #DDDDDD;
-	border-color: #E9967A; 	
-	border-left: 5px solid #800080; 
-	padding: 0.5em;
-	font-size: 18pt;
-}
-div.gc { 
-	background-color: #AEDE94;
-	border-color: #E9967A; 	 
-	border-left: 5px solid #800080; 
-	padding: 0.5em;
-	font-size: 12pt;
-}
-p.q1 { 
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-align: left; 
-    padding-left: 5px;
-    background-color: #EEEEEE; 
-    color: black;
-}
-header {
-   padding-top: 35px;
-    padding-bottom: 35px;
-    text-align: left; 
-    padding-left: 10px;
-    background-color: #DDDDDD; 
-    color: black;
-}
-</style>
-
-
-
-
-
 Load libraries used in this notebook.
-
-
 
 ```python
 '''IMPORT LIBRARIES'''
@@ -147,10 +57,6 @@ from matplotlib.backends.backend_pdf import PdfPages
 import pickle
 ```
 
-
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\ensemble\weight_boosting.py:29: DeprecationWarning: numpy.core.umath_tests is an internal NumPy module and should not be imported. It will be removed in a future NumPy release.
-      from numpy.core.umath_tests import inner1d
-    
 
 ## Data Loading and Cleaning
 
@@ -876,7 +782,7 @@ plt.subplots_adjust(top=0.85)
 
 
 
-![png](EDA_combined_files/EDA_combined_29_0.png)
+![png](EDA_combined_files/EDA_combined_28_0.png)
 
 
 The average number of visit among all patients is $7.3$ and ranges from $1$ to $11$ visits. There is no clear difference between the distributions of number of visits for patient diagnosed with AD, MCI or CN. It is important to verify that our data is Missing Completely at Random (MCAR) rather than Missing at Random (MAR). We cannot verify that the data is not Missing Not at Random (MNAR), since this would required information about the missing points that we do not possess.
@@ -923,7 +829,7 @@ plt.grid(False)
 
 
 
-![png](EDA_combined_files/EDA_combined_32_0.png)
+![png](EDA_combined_files/EDA_combined_31_0.png)
 
 
 Similar to the distribution of the number of visits by diagnosis, we can conclude from the plot above that there is no clear trend between number of visits, final CDRSB score, and diagnosis. We do not have evidence of missing data of type MAR.
@@ -962,7 +868,7 @@ plt.subplots_adjust(top=0.93);
 
 
 
-![png](EDA_combined_files/EDA_combined_35_0.png)
+![png](EDA_combined_files/EDA_combined_34_0.png)
 
 
 Across all protocols, demographic predictors (bottom of the Figure above) and cognitive test predictors (FAQ, RAVLT, etc.) have almost no missing data. In comparison, imaging predictors such as PET scan images AV45, PIB, and FDG as well as brain images (top of Figure above) have a lot of missing data. The Ecog-related predictors (middle of Figure above) only appeared after ADNI1 (and contain many missing $\texttt{delta}$ values ADNIGO and ADNI2). Except for these predictors, all other predictors seem to have similar missing daa among the 3 protocols. 
@@ -991,7 +897,7 @@ plt.title('Diagnosis transition between first and last visit');
 
 
 
-![png](EDA_combined_files/EDA_combined_39_0.png)
+![png](EDA_combined_files/EDA_combined_38_0.png)
 
 
 The above bar plot does not tell us the migration from one category to the other, but rather the porportions at baseline and final visit. To understand how the categories are changing, we can look at a cross table.
@@ -1089,7 +995,7 @@ for lh in leg.legendHandles:
 
 
 
-![png](EDA_combined_files/EDA_combined_43_0.png)
+![png](EDA_combined_files/EDA_combined_42_0.png)
 
 
 We note the following key points:
@@ -1160,7 +1066,7 @@ plt.subplots_adjust(top=0.85)
 
 
 
-![png](EDA_combined_files/EDA_combined_46_0.png)
+![png](EDA_combined_files/EDA_combined_45_0.png)
 
 
 While the first two plots in the Figure above show that there is a clear difference in the distribution of the CDRSB score with respect to different diagnosis, the third plot could represent a very simple classifier of the final diagnosis based on the initial CDRSB score. The classifier would be:
@@ -1210,7 +1116,7 @@ plt.title('Correlation factor');
 
 
 
-![png](EDA_combined_files/EDA_combined_51_0.png)
+![png](EDA_combined_files/EDA_combined_50_0.png)
 
 
 The results shown in the bar plot above are promising since a lot of inexpensive cognitive tests such as FAQ, Ecog, ADAS, and MOCA have high correlation to CDRSB. They represent good alternative to more expensive and time consuming imaging data such as FDG and Hippocampus.
@@ -1394,7 +1300,7 @@ plt.show()
 
 
 
-![png](EDA_combined_files/EDA_combined_67_0.png)
+![png](EDA_combined_files/EDA_combined_66_0.png)
 
 
 
@@ -1515,26 +1421,26 @@ scores.head(20)
     <tr>
       <th>0</th>
       <td>AdaBoostRegressor</td>
-      <td>0.776200</td>
-      <td>0.730839</td>
+      <td>0.768270</td>
+      <td>0.726817</td>
     </tr>
     <tr>
       <th>0</th>
       <td>BaggingRegressor</td>
-      <td>0.975702</td>
-      <td>0.871595</td>
+      <td>0.974780</td>
+      <td>0.879723</td>
     </tr>
     <tr>
       <th>0</th>
       <td>GradientBoostingRegressor</td>
       <td>0.958440</td>
-      <td>0.876948</td>
+      <td>0.875221</td>
     </tr>
     <tr>
       <th>0</th>
       <td>RandomForestRegressor</td>
-      <td>0.972961</td>
-      <td>0.875371</td>
+      <td>0.978864</td>
+      <td>0.877697</td>
     </tr>
   </tbody>
 </table>
@@ -1669,8 +1575,8 @@ scores_diag.head(20)
     <tr>
       <th>0</th>
       <td>BaggingClassifier</td>
-      <td>0.994034</td>
-      <td>0.907738</td>
+      <td>0.991797</td>
+      <td>0.892857</td>
     </tr>
     <tr>
       <th>0</th>
@@ -1681,8 +1587,8 @@ scores_diag.head(20)
     <tr>
       <th>0</th>
       <td>RandomForestClassifier</td>
-      <td>0.994034</td>
-      <td>0.880952</td>
+      <td>0.992543</td>
+      <td>0.889881</td>
     </tr>
   </tbody>
 </table>
