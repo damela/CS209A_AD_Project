@@ -9,7 +9,6 @@ notebook: olives-eda.ipynb
 *  
 {: toc}
 
-# <img style="float: left; padding-right: 10px; width: 45px" src="https://raw.githubusercontent.com/Harvard-IACS/2018-CS109A/master/content/styles/iacs.png"> CS209A Introduction to Data Science: 
 
 ## Final Project: Alzheimer's Disease and Cognitive Impairment Prediction
 
@@ -22,7 +21,6 @@ notebook: olives-eda.ipynb
 
 <hr style="height:2pt">
 
-# Exploratory Data Analysis
 
 
 
@@ -139,7 +137,6 @@ import seaborn as sns
 sns.set()
 matplotlib.rcParams['figure.figsize'] = (13.0, 6.0)
 
-# Aesthetic settings
 from IPython.display import display
 pd.set_option('display.max_columns', 999)
 pd.set_option('display.width', 500)
@@ -743,7 +740,6 @@ Finally, we generated two cleaned dataframes $\texttt{df_clean_diagnosis}$ and $
 ```python
 '''CLEAN THE DATAFRAME'''
 
-# Work on a copy of the raw df
 df_dummy = df.copy()
 
 #Create a new cleaned df
@@ -807,7 +803,6 @@ df_clean['PIB'] = df_dummy.PIB
 df_clean['AV45'] = df_dummy.AV45
 
 #Create a list of predictors for which we want to calculate delta
-# REMOVE SOFTWARE AND FIELD STRENGHT
 col_to_diff = ['ADAS11', 'ADAS13', 'MMSE', 'RAVLT_immediate',
  'RAVLT_learning', 'RAVLT_forgetting', 'RAVLT_perc_forgetting', 'FAQ', 'MOCA',
  'EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', 'EcogPtPlan', 'EcogPtOrgan',
@@ -820,7 +815,6 @@ for i in range(len(col_to_diff)):
     df_clean[col_to_diff[i]] = df_dummy[col_to_diff[i]]
     df_clean[col_to_diff[i]+'_delta'] = df_dummy[col_to_diff[i]] - df_dummy[col_to_diff[i]+'_bl']
 
-# Remove all nan observations in the response (diagnostics)
 df_diagnosis = df_clean.copy()
 df_diagnosis = df_diagnosis[pd.notna(df_clean['Diagnosis_Baseline'])]
 df_diagnosis = df_diagnosis[pd.notna(df_clean['Diagnosis'])]
@@ -1194,7 +1188,6 @@ Another important part of the EDA is to explore the predictors. We investigated 
 ```python
 '''ONE-HOT ENCODING FOR CORRELATION'''
 
-# Before correlation we one-hot encore the database
 df_cdrsb_oneHot = pd.get_dummies(df_cdrsb,drop_first=True)
 ```
 
@@ -1239,10 +1232,8 @@ For prediction of CDRSB score, we use the cleaned data frame containing the CDRS
 df_cdrsb_oneHot = pd.get_dummies(df_cdrsb,drop_first=True)
 df_cdrsb_oneHot_dropna = df_cdrsb_oneHot.copy()
 
-# Dropping columns that are mostly NaNs. 
 df_cdrsb_oneHot_dropna = df_cdrsb_oneHot_dropna.drop(['PIB','AV45','FDG'], axis = 1)
 
-# Dropping all samples with NaN
 df_cdrsb_oneHot_dropna = df_cdrsb_oneHot_dropna.dropna()
 
 #Train-test split
@@ -1264,10 +1255,8 @@ For prediction of Diagnosis, we use the cleaned data frame containing the diagno
 #Copy df
 df_diagnosis_dropna = df_diagnosis.copy()
 
-# Dropping columns that are mostly NaNs. 
 df_diagnosis_dropna = df_diagnosis_dropna.drop(['PIB', 'AV45','FDG'], axis = 1)
 
-# Dropping all samples with NaN
 df_diagnosis_dropna = df_diagnosis_dropna.dropna()
 
 #Train-test split
@@ -1389,7 +1378,6 @@ for d in depths:
 cvmeans = np.array(cvmeans)
 cvstds = np.array(cvstds)
 
-# plot means and shade the 2 SD interval
 plt.figure(figsize=(16,5))
 plt.plot(depths, cvmeans, '*-', label="Mean CV")
 plt.fill_between(depths, cvmeans - 2*cvstds, cvmeans + 2*cvstds, alpha=

@@ -1,5 +1,14 @@
+---
+nav_include: 2
+title: Models
+notebook: Models_combined.ipynb
+---
 
-# <img style="float: left; padding-right: 10px; width: 45px" src="https://raw.githubusercontent.com/Harvard-IACS/2018-CS109A/master/content/styles/iacs.png"> CS209A Introduction to Data Science: 
+## Contents
+{:.no_toc}
+*  
+{: toc}
+
 
 ## Final Project: Alzheimer's Disease and Cognitive Impairment Prediction
 
@@ -11,7 +20,6 @@
 
 <hr style="height:2pt">
 
-# Models
 
 
 
@@ -115,7 +123,6 @@ matplotlib.rcParams['figure.figsize'] = (13.0, 6.0)
 
 from time import clock
 
-# Aesthetic settings
 from IPython.display import display
 pd.set_option('display.max_columns', 999)
 pd.set_option('display.width', 500)
@@ -154,7 +161,6 @@ df = pd.read_csv(f)
 ```python
 '''CLEAN THE DATABASE'''
 
-# Work on a copy of the raw df
 df_dummy = df.copy()
 
 #Create a new cleaned df
@@ -196,10 +202,8 @@ df_clean['Marital_status'] = pd.Categorical(df_dummy.PTMARRY)
 df_clean['APOE4'] = pd.Categorical(df_dummy.APOE4)
 
 #FDG (PET scan marker)
-# df_clean['FDG'] = df_dummy.FDG
 
 #Create a list of predictors for which we want to calculate delta
-# REMOVE SOFTWARE AND FIELD STRENGHT
 remainingColumns = ['ADAS11', 'ADAS13', 'MMSE', 'RAVLT_immediate',
  'RAVLT_learning', 'RAVLT_forgetting', 'RAVLT_perc_forgetting', 'FAQ', 'MOCA',
  'EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', 'EcogPtPlan', 'EcogPtOrgan',
@@ -350,7 +354,6 @@ Let us prepare the split of the different feature subsets.
 ```python
 '''FEATURE SUBSETS'''
 
-# split up different groups of columns
 imaging_columns = ['ICV','MidTemp','Fusiform','Entorhinal','WholeBrain','Hippocampus','Ventricles'] #removed FDG!
 ecog_columns = ['EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', 'EcogPtPlan',
                 'EcogPtOrgan', 'EcogPtDivatt', 'EcogPtTotal', 'EcogSPMem',
@@ -364,7 +367,6 @@ for v in visits:
 standard_columns = list(set(df_clean.columns.values) - set(imaging_columns) - set(ecog_columns) \
                         - set(slope_columns) - set(final_columns))
 
-# subsets of columns to assemble for different models
 subsets = []
 subsets.append(standard_columns + final_columns)
 subsets.append(standard_columns + final_columns + ecog_columns)
@@ -380,7 +382,6 @@ We can now create the dictionary of dataframes to explore the impact of the time
 ```python
 '''DICTIONARY OF DFS'''
 
-# compile into a useful dictionary structure of dataframes for use later
 dfs = defaultdict(dict)
 visits_new = np.linspace(0.,11.,23)
 n_subsets = len(subsets)
