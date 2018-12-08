@@ -1,5 +1,5 @@
 ---
-nav_include: 2
+nav_include: 3
 title: Models
 notebook: Models_combined.ipynb
 ---
@@ -8,93 +8,6 @@ notebook: Models_combined.ipynb
 {:.no_toc}
 *  
 {: toc}
-
-
-## Final Project: Alzheimer's Disease and Cognitive Impairment Prediction
-
-**Harvard University**<br/>
-**Fall 2018**<br/>
-**Instructors**: Pavlos Protopapas, Kevin Rader
-
-**Team Members**: Zeo Liu, Connor Mccann, David Melancon
-
-<hr style="height:2pt">
-
-
-
-
-
-```python
-'''NOTEBOOK STYLE'''
-import requests
-from IPython.core.display import HTML
-styles = requests.get("https://raw.githubusercontent.com/Harvard-IACS/2018-CS109A/master/content/styles/cs109.css").text
-HTML(styles)
-```
-
-
-
-
-
-<style>
-blockquote { background: #AEDE94; }
-h1 { 
-    padding-top: 25px;
-    padding-bottom: 25px;
-    text-align: left; 
-    padding-left: 10px;
-    background-color: #DDDDDD; 
-    color: black;
-}
-h2 { 
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: left; 
-    padding-left: 5px;
-    background-color: #EEEEEE; 
-    color: black;
-}
-
-div.exercise {
-	background-color: #ffcccc;
-	border-color: #E9967A; 	
-	border-left: 5px solid #800080; 
-	padding: 0.5em;
-}
-div.theme {
-	background-color: #DDDDDD;
-	border-color: #E9967A; 	
-	border-left: 5px solid #800080; 
-	padding: 0.5em;
-	font-size: 18pt;
-}
-div.gc { 
-	background-color: #AEDE94;
-	border-color: #E9967A; 	 
-	border-left: 5px solid #800080; 
-	padding: 0.5em;
-	font-size: 12pt;
-}
-p.q1 { 
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-align: left; 
-    padding-left: 5px;
-    background-color: #EEEEEE; 
-    color: black;
-}
-header {
-   padding-top: 35px;
-    padding-bottom: 35px;
-    text-align: left; 
-    padding-left: 10px;
-    background-color: #DDDDDD; 
-    color: black;
-}
-</style>
-
-
-
 
 
 
@@ -240,7 +153,7 @@ plt.title('CDRSB vs. Age',fontweight='bold');
 
 
 
-![png](Models_combined_files/Models_combined_9_0.png)
+![png](Models_combined_files/Models_combined_8_0.png)
 
 
 From the plot above, we assume linear relationship between patient age and CDRSB score. The CDRSB score over time is simply
@@ -595,6 +508,7 @@ To prepare the data for training and testing, we have to create the predictor ma
 
 
 ```python
+'''PREPARING DATA'''
 n_subset = len(dfs)
 n_visits = len(dfs[0])
 Xs = defaultdict(dict)
@@ -660,7 +574,7 @@ plt.subplots_adjust(top=0.9);
 
 
 
-![png](Models_combined_files/Models_combined_30_0.png)
+![png](Models_combined_files/Models_combined_29_0.png)
 
 
 In the Figure above, the model scores only go up until $10$ years for subsets $0$ and $1$ and up until $8$ and $7$ years for subsets $2$ and $3$ due to missing data.
@@ -703,7 +617,7 @@ plt.suptitle('Baseline Heatmaps',fontsize=20);
 
 
 
-![png](Models_combined_files/Models_combined_33_0.png)
+![png](Models_combined_files/Models_combined_32_0.png)
 
 
 !!!!!!!!!!!!!!!!!!!SOME ANALYSIS IS MISSING HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -743,7 +657,7 @@ ax.legend();
 
 
 
-![png](Models_combined_files/Models_combined_37_0.png)
+![png](Models_combined_files/Models_combined_36_0.png)
 
 
 A way to deal with this issue is to apply sample weight based on the kernel density estimate. To do this, we update our sample weight function to
@@ -792,7 +706,7 @@ plt.suptitle('Heatmaps of Weighted Models',fontsize=20);
 
 
 
-![png](Models_combined_files/Models_combined_39_0.png)
+![png](Models_combined_files/Models_combined_38_0.png)
 
 
 ### Improving Baseline Model: Hyper-Parameter Tuning

@@ -2,8 +2,6 @@
 title: Alzheimer's Disease and Cognitive Impairment Prediction
 ---
 
-This is the home page
-
 ## CS209A Final Project
 
 >Group $39$: Connor McCann, David Melancon, Zixi Liu
