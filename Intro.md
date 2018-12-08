@@ -4,12 +4,6 @@ title: Introduction
 notebook: Intro.ipynb
 ---
 
-## Contents
-{:.no_toc}
-*  
-{: toc}
-
-
 ## Alzheimer's Disease Definition
 
 Zeo's part about what is AD and the sort of tests that are possible to detect it.
