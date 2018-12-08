@@ -1,15 +1,20 @@
 ---
-title: The Case of the Italian Olives
+title: Alzheimer's Disease and Cognitive Impairment Prediction
 ---
 
 This is the home page
 
-## Lets have fun
+## CS209A Final Project
 
->here is a quote
+>Group $39$: Connor McCann, David Melancon, Zixi Liu
 
-Here is *emph* and **bold**.
+## Project Statement
 
-Here is some inline math $\alpha = \frac{\beta}{\gamma}$ and, of-course, E rules:
+The project statement goes here!
 
-$$ G_{\mu\nu} + \Lambda g_{\mu\nu}  = 8 \pi T_{\mu\nu} . $$
+## Project Goals
+
+Here are the project goals
+
+1. something
+2. something else.
