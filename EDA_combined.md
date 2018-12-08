@@ -1,7 +1,7 @@
 ---
 nav_include: 1
 title: EDA
-notebook: olives-eda.ipynb
+notebook: EDA_combined.ipynb
 ---
 
 ## Contents
