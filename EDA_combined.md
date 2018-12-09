@@ -128,14 +128,11 @@ df = read_df(f)
 
 #Print only the first few rows and columns
 row_print = 5
-col_print = 14
-print('First rows and columns of the dataframe')
-display(df.loc[0:row_print,df.columns[0:col_print]])
+df.head(row_print)
 ```
 
 
-    First rows and columns of the dataframe
-    
+
 
 
 <div>
@@ -170,6 +167,86 @@ display(df.loc[0:row_print,df.columns[0:col_print]])
       <th>PTETHCAT</th>
       <th>PTRACCAT</th>
       <th>PTMARRY</th>
+      <th>APOE4</th>
+      <th>FDG</th>
+      <th>PIB</th>
+      <th>AV45</th>
+      <th>CDRSB</th>
+      <th>ADAS11</th>
+      <th>ADAS13</th>
+      <th>MMSE</th>
+      <th>RAVLT_immediate</th>
+      <th>RAVLT_learning</th>
+      <th>RAVLT_forgetting</th>
+      <th>RAVLT_perc_forgetting</th>
+      <th>FAQ</th>
+      <th>MOCA</th>
+      <th>EcogPtMem</th>
+      <th>EcogPtLang</th>
+      <th>EcogPtVisspat</th>
+      <th>EcogPtPlan</th>
+      <th>EcogPtOrgan</th>
+      <th>EcogPtDivatt</th>
+      <th>EcogPtTotal</th>
+      <th>EcogSPMem</th>
+      <th>EcogSPLang</th>
+      <th>EcogSPVisspat</th>
+      <th>EcogSPPlan</th>
+      <th>EcogSPOrgan</th>
+      <th>EcogSPDivatt</th>
+      <th>EcogSPTotal</th>
+      <th>FLDSTRENG</th>
+      <th>FSVERSION</th>
+      <th>Ventricles</th>
+      <th>Hippocampus</th>
+      <th>WholeBrain</th>
+      <th>Entorhinal</th>
+      <th>Fusiform</th>
+      <th>MidTemp</th>
+      <th>ICV</th>
+      <th>DX</th>
+      <th>EXAMDATE_bl</th>
+      <th>CDRSB_bl</th>
+      <th>ADAS11_bl</th>
+      <th>ADAS13_bl</th>
+      <th>MMSE_bl</th>
+      <th>RAVLT_immediate_bl</th>
+      <th>RAVLT_learning_bl</th>
+      <th>RAVLT_forgetting_bl</th>
+      <th>RAVLT_perc_forgetting_bl</th>
+      <th>FAQ_bl</th>
+      <th>FLDSTRENG_bl</th>
+      <th>FSVERSION_bl</th>
+      <th>Ventricles_bl</th>
+      <th>Hippocampus_bl</th>
+      <th>WholeBrain_bl</th>
+      <th>Entorhinal_bl</th>
+      <th>Fusiform_bl</th>
+      <th>MidTemp_bl</th>
+      <th>ICV_bl</th>
+      <th>MOCA_bl</th>
+      <th>EcogPtMem_bl</th>
+      <th>EcogPtLang_bl</th>
+      <th>EcogPtVisspat_bl</th>
+      <th>EcogPtPlan_bl</th>
+      <th>EcogPtOrgan_bl</th>
+      <th>EcogPtDivatt_bl</th>
+      <th>EcogPtTotal_bl</th>
+      <th>EcogSPMem_bl</th>
+      <th>EcogSPLang_bl</th>
+      <th>EcogSPVisspat_bl</th>
+      <th>EcogSPPlan_bl</th>
+      <th>EcogSPOrgan_bl</th>
+      <th>EcogSPDivatt_bl</th>
+      <th>EcogSPTotal_bl</th>
+      <th>FDG_bl</th>
+      <th>PIB_bl</th>
+      <th>AV45_bl</th>
+      <th>Years_bl</th>
+      <th>Month_bl</th>
+      <th>Month</th>
+      <th>M</th>
+      <th>update_stamp</th>
     </tr>
   </thead>
   <tbody>
@@ -189,6 +266,86 @@ display(df.loc[0:row_print,df.columns[0:col_print]])
       <td>Not Hisp/Latino</td>
       <td>White</td>
       <td>Married</td>
+      <td>0.0</td>
+      <td>1.36926</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>10.67</td>
+      <td>18.67</td>
+      <td>28.0</td>
+      <td>44.0</td>
+      <td>4.0</td>
+      <td>6.0</td>
+      <td>54.5455</td>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>118233.0</td>
+      <td>8336.0</td>
+      <td>1229740.0</td>
+      <td>4177.0</td>
+      <td>16559.0</td>
+      <td>27936.0</td>
+      <td>1984660.0</td>
+      <td>CN</td>
+      <td>2005-09-08</td>
+      <td>0.0</td>
+      <td>10.67</td>
+      <td>18.67</td>
+      <td>28</td>
+      <td>44.0</td>
+      <td>4.0</td>
+      <td>6.0</td>
+      <td>54.5455</td>
+      <td>0.0</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>118233.0</td>
+      <td>8336.0</td>
+      <td>1229740.0</td>
+      <td>4177.0</td>
+      <td>16559.0</td>
+      <td>27936.0</td>
+      <td>1984660.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.36926</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.00000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2017-08-13 23:50:48.0</td>
     </tr>
     <tr>
       <th>1</th>
@@ -206,6 +363,86 @@ display(df.loc[0:row_print,df.columns[0:col_print]])
       <td>Not Hisp/Latino</td>
       <td>White</td>
       <td>Married</td>
+      <td>1.0</td>
+      <td>1.09079</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>4.5</td>
+      <td>22.00</td>
+      <td>31.00</td>
+      <td>20.0</td>
+      <td>22.0</td>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>100.0000</td>
+      <td>10.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>84599.0</td>
+      <td>5319.0</td>
+      <td>1129830.0</td>
+      <td>1791.0</td>
+      <td>15506.0</td>
+      <td>18422.0</td>
+      <td>1920690.0</td>
+      <td>Dementia</td>
+      <td>2005-09-12</td>
+      <td>4.5</td>
+      <td>22.00</td>
+      <td>31.00</td>
+      <td>20</td>
+      <td>22.0</td>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>100.0000</td>
+      <td>10.0</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>84599.0</td>
+      <td>5319.0</td>
+      <td>1129830.0</td>
+      <td>1791.0</td>
+      <td>15506.0</td>
+      <td>18422.0</td>
+      <td>1920690.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.09079</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.00000</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2017-08-13 23:50:48.0</td>
     </tr>
     <tr>
       <th>2</th>
@@ -223,6 +460,86 @@ display(df.loc[0:row_print,df.columns[0:col_print]])
       <td>Not Hisp/Latino</td>
       <td>White</td>
       <td>Married</td>
+      <td>1.0</td>
+      <td>1.06360</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>6.0</td>
+      <td>19.00</td>
+      <td>30.00</td>
+      <td>24.0</td>
+      <td>19.0</td>
+      <td>2.0</td>
+      <td>6.0</td>
+      <td>100.0000</td>
+      <td>12.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>88580.0</td>
+      <td>5446.0</td>
+      <td>1100060.0</td>
+      <td>2427.0</td>
+      <td>14400.0</td>
+      <td>16972.0</td>
+      <td>1906430.0</td>
+      <td>Dementia</td>
+      <td>2005-09-12</td>
+      <td>4.5</td>
+      <td>22.00</td>
+      <td>31.00</td>
+      <td>20</td>
+      <td>22.0</td>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>100.0000</td>
+      <td>10.0</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>84599.0</td>
+      <td>5319.0</td>
+      <td>1129830.0</td>
+      <td>1791.0</td>
+      <td>15506.0</td>
+      <td>18422.0</td>
+      <td>1920690.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.09079</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.498289</td>
+      <td>5.96721</td>
+      <td>6</td>
+      <td>6</td>
+      <td>2017-08-13 23:50:48.0</td>
     </tr>
     <tr>
       <th>3</th>
@@ -240,6 +557,86 @@ display(df.loc[0:row_print,df.columns[0:col_print]])
       <td>Not Hisp/Latino</td>
       <td>White</td>
       <td>Married</td>
+      <td>1.0</td>
+      <td>1.10384</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.5</td>
+      <td>24.00</td>
+      <td>35.00</td>
+      <td>17.0</td>
+      <td>31.0</td>
+      <td>2.0</td>
+      <td>7.0</td>
+      <td>100.0000</td>
+      <td>17.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>90099.0</td>
+      <td>5157.0</td>
+      <td>1095640.0</td>
+      <td>1596.0</td>
+      <td>14617.0</td>
+      <td>17330.0</td>
+      <td>1903820.0</td>
+      <td>Dementia</td>
+      <td>2005-09-12</td>
+      <td>4.5</td>
+      <td>22.00</td>
+      <td>31.00</td>
+      <td>20</td>
+      <td>22.0</td>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>100.0000</td>
+      <td>10.0</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>84599.0</td>
+      <td>5319.0</td>
+      <td>1129830.0</td>
+      <td>1791.0</td>
+      <td>15506.0</td>
+      <td>18422.0</td>
+      <td>1920690.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.09079</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.999316</td>
+      <td>11.96720</td>
+      <td>12</td>
+      <td>12</td>
+      <td>2017-08-13 23:50:48.0</td>
     </tr>
     <tr>
       <th>4</th>
@@ -257,27 +654,91 @@ display(df.loc[0:row_print,df.columns[0:col_print]])
       <td>Not Hisp/Latino</td>
       <td>White</td>
       <td>Married</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>4</td>
-      <td>022_S_0004</td>
-      <td>bl</td>
-      <td>22</td>
-      <td>ADNI1</td>
-      <td>ADNI1</td>
-      <td>2005-11-08</td>
-      <td>LMCI</td>
-      <td>67.5</td>
-      <td>Male</td>
-      <td>10</td>
-      <td>Hisp/Latino</td>
-      <td>White</td>
-      <td>Married</td>
+      <td>1.0</td>
+      <td>1.03871</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>8.0</td>
+      <td>25.67</td>
+      <td>37.67</td>
+      <td>19.0</td>
+      <td>23.0</td>
+      <td>1.0</td>
+      <td>5.0</td>
+      <td>100.0000</td>
+      <td>14.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>97420.0</td>
+      <td>5139.0</td>
+      <td>1088560.0</td>
+      <td>1175.0</td>
+      <td>14033.0</td>
+      <td>16398.0</td>
+      <td>1903420.0</td>
+      <td>Dementia</td>
+      <td>2005-09-12</td>
+      <td>4.5</td>
+      <td>22.00</td>
+      <td>31.00</td>
+      <td>20</td>
+      <td>22.0</td>
+      <td>1.0</td>
+      <td>4.0</td>
+      <td>100.0000</td>
+      <td>10.0</td>
+      <td>1.5 Tesla MRI</td>
+      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
+      <td>84599.0</td>
+      <td>5319.0</td>
+      <td>1129830.0</td>
+      <td>1791.0</td>
+      <td>15506.0</td>
+      <td>18422.0</td>
+      <td>1920690.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.09079</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.998630</td>
+      <td>23.93440</td>
+      <td>24</td>
+      <td>24</td>
+      <td>2017-08-13 23:50:48.0</td>
     </tr>
   </tbody>
 </table>
 </div>
+
 
 
 First, let us take a look at the columns. Let us see how many we have and what are their names.
@@ -445,8 +906,7 @@ Let us examine the statistics of some of the columns.
 '''STATS OF THE COLUMNS'''
 
 #Display statistics of firt few columns
-col_print = 20 #have to increase this number since cat, object, etc. are ignored
-df.loc[:,df.columns[0:col_print]].describe()
+df.describe()
 ```
 
 
@@ -481,6 +941,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <th>AV45</th>
       <th>CDRSB</th>
       <th>ADAS11</th>
+      <th>ADAS13</th>
+      <th>MMSE</th>
+      <th>RAVLT_immediate</th>
+      <th>RAVLT_learning</th>
+      <th>RAVLT_forgetting</th>
+      <th>RAVLT_perc_forgetting</th>
+      <th>FAQ</th>
+      <th>MOCA</th>
+      <th>EcogPtMem</th>
+      <th>EcogPtLang</th>
+      <th>EcogPtVisspat</th>
+      <th>EcogPtPlan</th>
+      <th>EcogPtOrgan</th>
+      <th>EcogPtDivatt</th>
+      <th>EcogPtTotal</th>
+      <th>EcogSPMem</th>
+      <th>EcogSPLang</th>
+      <th>EcogSPVisspat</th>
+      <th>EcogSPPlan</th>
+      <th>EcogSPOrgan</th>
+      <th>EcogSPDivatt</th>
+      <th>EcogSPTotal</th>
+      <th>Ventricles</th>
+      <th>Hippocampus</th>
+      <th>WholeBrain</th>
+      <th>Entorhinal</th>
+      <th>Fusiform</th>
+      <th>MidTemp</th>
+      <th>ICV</th>
+      <th>CDRSB_bl</th>
+      <th>ADAS11_bl</th>
+      <th>ADAS13_bl</th>
+      <th>MMSE_bl</th>
+      <th>RAVLT_immediate_bl</th>
+      <th>RAVLT_learning_bl</th>
+      <th>RAVLT_forgetting_bl</th>
+      <th>RAVLT_perc_forgetting_bl</th>
+      <th>FAQ_bl</th>
+      <th>Ventricles_bl</th>
+      <th>Hippocampus_bl</th>
+      <th>WholeBrain_bl</th>
+      <th>Entorhinal_bl</th>
+      <th>Fusiform_bl</th>
+      <th>MidTemp_bl</th>
+      <th>ICV_bl</th>
+      <th>MOCA_bl</th>
+      <th>EcogPtMem_bl</th>
+      <th>EcogPtLang_bl</th>
+      <th>EcogPtVisspat_bl</th>
+      <th>EcogPtPlan_bl</th>
+      <th>EcogPtOrgan_bl</th>
+      <th>EcogPtDivatt_bl</th>
+      <th>EcogPtTotal_bl</th>
+      <th>EcogSPMem_bl</th>
+      <th>EcogSPLang_bl</th>
+      <th>EcogSPVisspat_bl</th>
+      <th>EcogSPPlan_bl</th>
+      <th>EcogSPOrgan_bl</th>
+      <th>EcogSPDivatt_bl</th>
+      <th>EcogSPTotal_bl</th>
+      <th>FDG_bl</th>
+      <th>PIB_bl</th>
+      <th>AV45_bl</th>
+      <th>Years_bl</th>
+      <th>Month_bl</th>
+      <th>Month</th>
+      <th>M</th>
     </tr>
   </thead>
   <tbody>
@@ -496,6 +1023,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>2161.000000</td>
       <td>9016.000000</td>
       <td>8959.000000</td>
+      <td>8873.000000</td>
+      <td>9174.000000</td>
+      <td>9062.000000</td>
+      <td>9062.000000</td>
+      <td>9036.000000</td>
+      <td>8966.000000</td>
+      <td>9242.000000</td>
+      <td>5200.000000</td>
+      <td>5290.000000</td>
+      <td>5274.000000</td>
+      <td>5233.000000</td>
+      <td>5264.000000</td>
+      <td>5157.000000</td>
+      <td>5233.000000</td>
+      <td>5278.000000</td>
+      <td>5324.000000</td>
+      <td>5329.000000</td>
+      <td>5229.000000</td>
+      <td>5266.000000</td>
+      <td>5094.000000</td>
+      <td>5191.000000</td>
+      <td>5324.000000</td>
+      <td>7447.000000</td>
+      <td>6804.000000</td>
+      <td>7.691000e+03</td>
+      <td>6470.000000</td>
+      <td>6470.000000</td>
+      <td>6470.000000</td>
+      <td>7.955000e+03</td>
+      <td>13017.000000</td>
+      <td>12998.000000</td>
+      <td>12937.000000</td>
+      <td>13017.000000</td>
+      <td>12979.000000</td>
+      <td>12979.000000</td>
+      <td>12979.000000</td>
+      <td>12958.000000</td>
+      <td>12969.000000</td>
+      <td>12471.000000</td>
+      <td>11174.000000</td>
+      <td>1.272100e+04</td>
+      <td>11060.000000</td>
+      <td>11060.000000</td>
+      <td>11060.000000</td>
+      <td>1.287700e+04</td>
+      <td>5985.000000</td>
+      <td>6046.000000</td>
+      <td>6044.000000</td>
+      <td>6021.000000</td>
+      <td>6043.000000</td>
+      <td>5906.000000</td>
+      <td>6004.000000</td>
+      <td>6044.000000</td>
+      <td>6028.000000</td>
+      <td>6033.000000</td>
+      <td>5948.000000</td>
+      <td>5982.000000</td>
+      <td>5749.000000</td>
+      <td>5888.000000</td>
+      <td>6024.000000</td>
+      <td>9353.000000</td>
+      <td>148.000000</td>
+      <td>5969.000000</td>
+      <td>13017.000000</td>
+      <td>13017.000000</td>
+      <td>13017.000000</td>
+      <td>13017.000000</td>
     </tr>
     <tr>
       <th>mean</th>
@@ -509,6 +1103,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>1.195504</td>
       <td>2.163598</td>
       <td>11.398507</td>
+      <td>17.509320</td>
+      <td>26.618487</td>
+      <td>34.636614</td>
+      <td>4.054293</td>
+      <td>4.221780</td>
+      <td>59.026011</td>
+      <td>5.539277</td>
+      <td>23.131154</td>
+      <td>2.068037</td>
+      <td>1.725167</td>
+      <td>1.391397</td>
+      <td>1.414118</td>
+      <td>1.536119</td>
+      <td>1.826024</td>
+      <td>1.680056</td>
+      <td>2.150056</td>
+      <td>1.722365</td>
+      <td>1.602092</td>
+      <td>1.712923</td>
+      <td>1.801041</td>
+      <td>2.001413</td>
+      <td>1.833178</td>
+      <td>42146.102994</td>
+      <td>6682.109935</td>
+      <td>1.011850e+06</td>
+      <td>3444.734158</td>
+      <td>17147.247295</td>
+      <td>19204.438022</td>
+      <td>1.534151e+06</td>
+      <td>1.343551</td>
+      <td>9.779214</td>
+      <td>15.442563</td>
+      <td>27.585696</td>
+      <td>36.548270</td>
+      <td>4.432545</td>
+      <td>4.288466</td>
+      <td>54.955661</td>
+      <td>3.311820</td>
+      <td>38945.059739</td>
+      <td>6872.955343</td>
+      <td>1.025600e+06</td>
+      <td>3555.199638</td>
+      <td>17446.070615</td>
+      <td>19691.262929</td>
+      <td>1.536765e+06</td>
+      <td>23.436090</td>
+      <td>2.129183</td>
+      <td>1.745502</td>
+      <td>1.380695</td>
+      <td>1.408103</td>
+      <td>1.519063</td>
+      <td>1.813027</td>
+      <td>1.689268</td>
+      <td>2.045483</td>
+      <td>1.591564</td>
+      <td>1.422330</td>
+      <td>1.544004</td>
+      <td>1.641999</td>
+      <td>1.833192</td>
+      <td>1.682636</td>
+      <td>1.248308</td>
+      <td>1.589713</td>
+      <td>1.200700</td>
+      <td>2.235266</td>
+      <td>26.768221</td>
+      <td>26.688868</td>
+      <td>26.498041</td>
     </tr>
     <tr>
       <th>std</th>
@@ -522,6 +1183,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>0.227999</td>
       <td>2.805879</td>
       <td>8.616859</td>
+      <td>11.677857</td>
+      <td>3.948937</td>
+      <td>13.627295</td>
+      <td>2.822750</td>
+      <td>2.557443</td>
+      <td>52.239953</td>
+      <td>7.899503</td>
+      <td>4.720635</td>
+      <td>0.736604</td>
+      <td>0.637845</td>
+      <td>0.540692</td>
+      <td>0.554790</td>
+      <td>0.629540</td>
+      <td>0.750977</td>
+      <td>0.544783</td>
+      <td>1.001560</td>
+      <td>0.834067</td>
+      <td>0.855485</td>
+      <td>0.924877</td>
+      <td>0.988516</td>
+      <td>1.011820</td>
+      <td>0.857908</td>
+      <td>23269.112377</td>
+      <td>1240.060365</td>
+      <td>1.119986e+05</td>
+      <td>811.710159</td>
+      <td>2819.191604</td>
+      <td>3139.342134</td>
+      <td>1.662853e+05</td>
+      <td>1.548108</td>
+      <td>5.887678</td>
+      <td>8.687758</td>
+      <td>2.385881</td>
+      <td>12.055257</td>
+      <td>2.711478</td>
+      <td>2.514682</td>
+      <td>34.364874</td>
+      <td>5.449271</td>
+      <td>21835.334609</td>
+      <td>1160.317315</td>
+      <td>1.093686e+05</td>
+      <td>771.052514</td>
+      <td>2656.183271</td>
+      <td>2965.965897</td>
+      <td>1.632440e+05</td>
+      <td>3.926501</td>
+      <td>0.723420</td>
+      <td>0.626584</td>
+      <td>0.532588</td>
+      <td>0.549710</td>
+      <td>0.615394</td>
+      <td>0.733143</td>
+      <td>0.529846</td>
+      <td>0.891520</td>
+      <td>0.710627</td>
+      <td>0.657678</td>
+      <td>0.746716</td>
+      <td>0.833310</td>
+      <td>0.890230</td>
+      <td>0.695583</td>
+      <td>0.145496</td>
+      <td>0.305744</td>
+      <td>0.221538</td>
+      <td>2.225071</td>
+      <td>26.646135</td>
+      <td>26.609785</td>
+      <td>26.398907</td>
     </tr>
     <tr>
       <th>min</th>
@@ -533,6 +1261,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>0.636804</td>
       <td>1.095000</td>
       <td>0.814555</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>-5.000000</td>
+      <td>-33.000000</td>
+      <td>-3300.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>5650.000000</td>
+      <td>2219.000000</td>
+      <td>6.490910e+05</td>
+      <td>1041.000000</td>
+      <td>7739.000000</td>
+      <td>8044.000000</td>
+      <td>2.918840e+02</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>18.000000</td>
+      <td>0.000000</td>
+      <td>-4.000000</td>
+      <td>-5.000000</td>
+      <td>-100.000000</td>
+      <td>0.000000</td>
+      <td>5650.000000</td>
+      <td>2991.000000</td>
+      <td>6.693640e+05</td>
+      <td>1426.000000</td>
+      <td>8991.000000</td>
+      <td>9375.000000</td>
+      <td>1.100690e+06</td>
+      <td>4.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>0.697264</td>
+      <td>1.155000</td>
+      <td>0.838537</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
     </tr>
@@ -548,6 +1343,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>1.010140</td>
       <td>0.000000</td>
       <td>5.330000</td>
+      <td>9.000000</td>
+      <td>25.000000</td>
+      <td>25.000000</td>
+      <td>2.000000</td>
+      <td>3.000000</td>
+      <td>28.571400</td>
+      <td>0.000000</td>
+      <td>21.000000</td>
+      <td>1.500000</td>
+      <td>1.222220</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.250000</td>
+      <td>1.256410</td>
+      <td>1.250000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.131580</td>
+      <td>25128.000000</td>
+      <td>5830.000000</td>
+      <td>9.338095e+05</td>
+      <td>2905.250000</td>
+      <td>15271.250000</td>
+      <td>17183.250000</td>
+      <td>1.417180e+06</td>
+      <td>0.000000</td>
+      <td>5.670000</td>
+      <td>9.000000</td>
+      <td>26.000000</td>
+      <td>28.000000</td>
+      <td>2.000000</td>
+      <td>3.000000</td>
+      <td>27.272700</td>
+      <td>0.000000</td>
+      <td>23333.000000</td>
+      <td>6079.000000</td>
+      <td>9.466060e+05</td>
+      <td>3038.000000</td>
+      <td>15698.000000</td>
+      <td>17753.000000</td>
+      <td>1.421560e+06</td>
+      <td>21.000000</td>
+      <td>1.500000</td>
+      <td>1.222220</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.250000</td>
+      <td>1.292957</td>
+      <td>1.250000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>1.153850</td>
+      <td>1.159220</td>
+      <td>1.360000</td>
+      <td>1.018950</td>
+      <td>0.498289</td>
+      <td>5.967210</td>
+      <td>6.000000</td>
+      <td>6.000000</td>
     </tr>
     <tr>
       <th>50%</th>
@@ -561,6 +1423,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>1.114670</td>
       <td>1.000000</td>
       <td>9.000000</td>
+      <td>15.000000</td>
+      <td>28.000000</td>
+      <td>34.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>61.538500</td>
+      <td>1.000000</td>
+      <td>24.000000</td>
+      <td>2.000000</td>
+      <td>1.555560</td>
+      <td>1.142860</td>
+      <td>1.200000</td>
+      <td>1.333330</td>
+      <td>1.750000</td>
+      <td>1.538460</td>
+      <td>1.875000</td>
+      <td>1.333330</td>
+      <td>1.142860</td>
+      <td>1.200000</td>
+      <td>1.333330</td>
+      <td>1.750000</td>
+      <td>1.487180</td>
+      <td>37434.000000</td>
+      <td>6760.000000</td>
+      <td>1.009330e+06</td>
+      <td>3482.000000</td>
+      <td>17183.000000</td>
+      <td>19240.500000</td>
+      <td>1.522460e+06</td>
+      <td>1.000000</td>
+      <td>8.670000</td>
+      <td>14.000000</td>
+      <td>28.000000</td>
+      <td>36.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>54.545500</td>
+      <td>1.000000</td>
+      <td>33771.000000</td>
+      <td>6950.000000</td>
+      <td>1.023120e+06</td>
+      <td>3581.000000</td>
+      <td>17368.000000</td>
+      <td>19612.000000</td>
+      <td>1.524500e+06</td>
+      <td>24.000000</td>
+      <td>2.000000</td>
+      <td>1.555560</td>
+      <td>1.142860</td>
+      <td>1.200000</td>
+      <td>1.333330</td>
+      <td>1.750000</td>
+      <td>1.564100</td>
+      <td>1.750000</td>
+      <td>1.333330</td>
+      <td>1.142860</td>
+      <td>1.200000</td>
+      <td>1.250000</td>
+      <td>1.500000</td>
+      <td>1.421050</td>
+      <td>1.255850</td>
+      <td>1.490000</td>
+      <td>1.120310</td>
+      <td>1.524980</td>
+      <td>18.262300</td>
+      <td>18.000000</td>
+      <td>18.000000</td>
     </tr>
     <tr>
       <th>75%</th>
@@ -574,6 +1503,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>1.364980</td>
       <td>3.000000</td>
       <td>15.000000</td>
+      <td>24.000000</td>
+      <td>29.000000</td>
+      <td>44.000000</td>
+      <td>6.000000</td>
+      <td>6.000000</td>
+      <td>100.000000</td>
+      <td>9.000000</td>
+      <td>26.000000</td>
+      <td>2.625000</td>
+      <td>2.111110</td>
+      <td>1.571430</td>
+      <td>1.600000</td>
+      <td>1.833330</td>
+      <td>2.250000</td>
+      <td>1.973680</td>
+      <td>3.000000</td>
+      <td>2.222220</td>
+      <td>2.000000</td>
+      <td>2.200000</td>
+      <td>2.333330</td>
+      <td>2.750000</td>
+      <td>2.358970</td>
+      <td>53414.000000</td>
+      <td>7583.000000</td>
+      <td>1.088285e+06</td>
+      <td>4013.000000</td>
+      <td>19028.250000</td>
+      <td>21398.500000</td>
+      <td>1.641215e+06</td>
+      <td>2.000000</td>
+      <td>12.670000</td>
+      <td>20.330000</td>
+      <td>29.000000</td>
+      <td>45.000000</td>
+      <td>6.000000</td>
+      <td>6.000000</td>
+      <td>87.500000</td>
+      <td>4.000000</td>
+      <td>49333.000000</td>
+      <td>7691.000000</td>
+      <td>1.098860e+06</td>
+      <td>4104.500000</td>
+      <td>19149.000000</td>
+      <td>21680.000000</td>
+      <td>1.644350e+06</td>
+      <td>26.000000</td>
+      <td>2.625000</td>
+      <td>2.111110</td>
+      <td>1.571430</td>
+      <td>1.600000</td>
+      <td>1.833330</td>
+      <td>2.250000</td>
+      <td>1.947707</td>
+      <td>2.750000</td>
+      <td>2.000000</td>
+      <td>1.571430</td>
+      <td>1.800000</td>
+      <td>2.000000</td>
+      <td>2.250000</td>
+      <td>2.029533</td>
+      <td>1.340630</td>
+      <td>1.835000</td>
+      <td>1.374980</td>
+      <td>3.091030</td>
+      <td>37.016400</td>
+      <td>36.000000</td>
+      <td>36.000000</td>
     </tr>
     <tr>
       <th>max</th>
@@ -587,6 +1583,73 @@ df.loc[:,df.columns[0:col_print]].describe()
       <td>2.669210</td>
       <td>18.000000</td>
       <td>70.000000</td>
+      <td>85.000000</td>
+      <td>30.000000</td>
+      <td>75.000000</td>
+      <td>14.000000</td>
+      <td>15.000000</td>
+      <td>100.000000</td>
+      <td>30.000000</td>
+      <td>30.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>162729.000000</td>
+      <td>11207.000000</td>
+      <td>1.486040e+06</td>
+      <td>6711.000000</td>
+      <td>29950.000000</td>
+      <td>32189.000000</td>
+      <td>2.110290e+06</td>
+      <td>10.000000</td>
+      <td>42.670000</td>
+      <td>54.670000</td>
+      <td>30.000000</td>
+      <td>71.000000</td>
+      <td>12.000000</td>
+      <td>15.000000</td>
+      <td>100.000000</td>
+      <td>30.000000</td>
+      <td>145115.000000</td>
+      <td>10769.000000</td>
+      <td>1.486040e+06</td>
+      <td>5896.000000</td>
+      <td>29950.000000</td>
+      <td>32189.000000</td>
+      <td>2.110290e+06</td>
+      <td>30.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>3.820510</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>4.000000</td>
+      <td>3.948720</td>
+      <td>1.707170</td>
+      <td>2.282500</td>
+      <td>2.025560</td>
+      <td>11.036300</td>
+      <td>132.164000</td>
+      <td>132.000000</td>
+      <td>126.000000</td>
     </tr>
   </tbody>
 </table>
@@ -836,10 +1899,6 @@ plt.grid(False)
 ```
 
 
-
-![png](EDA_combined_files/EDA_combined_31_0.png)
-
-
 Similar to the distribution of the number of visits by diagnosis, we can conclude from the plot above that there is no clear trend between number of visits, final CDRSB score, and diagnosis. We do not have evidence of missing data of type MAR.
 
 We also need to investigate the missingness in the predictors and across different protocols (ADNI1, ADNIGO, and ADNI2). To visualize this, we can plot the number of observations (not null and not NaN) for each of the predictors separated by protocol.
@@ -870,13 +1929,9 @@ axes[2].tick_params(labelsize=10)
 axes[2].grid(False)
 axes[2].set_title('ADNI2')
 
-plt.suptitle('Predictor counts of the 3 different protocols')
+plt.suptitle('Predictor counts of the 3 different protocols',fontsize=20)
 plt.subplots_adjust(top=0.93);
 ```
-
-
-
-![png](EDA_combined_files/EDA_combined_34_0.png)
 
 
 Across all protocols, demographic predictors (bottom of the Figure above) and cognitive test predictors (FAQ, RAVLT, etc.) have almost no missing data. In comparison, imaging predictors such as PET scan images AV45, PIB, and FDG as well as brain images (top of Figure above) have a lot of missing data. The Ecog-related predictors (middle of Figure above) only appeared after ADNI1 (and contain many missing $\texttt{delta}$ values ADNIGO and ADNI2). Except for these predictors, all other predictors seem to have similar missing daa among the 3 protocols. 
@@ -904,10 +1959,6 @@ plt.title('Diagnosis distribution at first and last visit');
 ```
 
 
-
-![png](EDA_combined_files/EDA_combined_38_0.png)
-
-
 The above bar plot does not tell us the transition from one category to the other, but rather the porportions at baseline and final visit. To understand how the categories are changing, we can look at a cross table.
 
 
@@ -916,63 +1967,6 @@ The above bar plot does not tell us the transition from one category to the othe
 '''CROSS-TABLE OF DIAGNOSIS TRANSITION'''
 pd.crosstab(df_diagnosis.Diagnosis_Baseline, df_diagnosis.Diagnosis)
 ```
-
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>Diagnosis</th>
-      <th>AD</th>
-      <th>CN</th>
-      <th>MCI</th>
-    </tr>
-    <tr>
-      <th>Diagnosis_Baseline</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>AD</th>
-      <td>1079</td>
-      <td>0</td>
-      <td>11</td>
-    </tr>
-    <tr>
-      <th>CN</th>
-      <td>57</td>
-      <td>2544</td>
-      <td>210</td>
-    </tr>
-    <tr>
-      <th>MCI</th>
-      <td>972</td>
-      <td>202</td>
-      <td>3835</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
 
 
 A large proportion of patients diagnosed with CN at baseline stayed CN ($91$%). For the patients diagnosed with MCI at baseline, about $19$% of them were diagnosed with AD after the study, $77$% stayed MCI, and $4$ went back to CN. Finally, for patients diagnosed with AD at baseline, $1$% of them went back to MCI and no patient went back to CN. This makes sense as AD is non-curable and degenerative.
@@ -1000,10 +1994,6 @@ leg = plt.legend()
 for lh in leg.legendHandles: 
     lh.set_alpha(1)
 ```
-
-
-
-![png](EDA_combined_files/EDA_combined_42_0.png)
 
 
 We note the following key points:
@@ -1073,10 +2063,6 @@ plt.subplots_adjust(top=0.85)
 ```
 
 
-
-![png](EDA_combined_files/EDA_combined_45_0.png)
-
-
 While the first two plots in the Figure above show that there is a clear difference in the distribution of the CDRSB score with respect to different diagnosis, the third plot could represent a very simple classifier of the final diagnosis based on the initial CDRSB score. The classifier would be:
 
 
@@ -1121,10 +2107,6 @@ plt.tick_params(labelsize=10)
 plt.xlim(0,1);
 plt.title('Correlation factor');
 ```
-
-
-
-![png](EDA_combined_files/EDA_combined_50_0.png)
 
 
 The results shown in the bar plot above are promising since a lot of inexpensive cognitive tests such as FAQ, Ecog, ADAS, and MOCA have high correlation to CDRSB. They represent good alternative to more expensive and time consuming imaging data such as FDG and Hippocampus.
@@ -1229,28 +2211,6 @@ add_to_scores('RidgeCV', training_score, test_score)
 ```
 
 
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\linear_model\ridge.py:112: LinAlgWarning: scipy.linalg.solve
-    Ill-conditioned matrix detected. Result is not guaranteed to be accurate.
-    Reciprocal condition number2.180568e-17
-      overwrite_a=True).T
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\linear_model\ridge.py:112: LinAlgWarning: scipy.linalg.solve
-    Ill-conditioned matrix detected. Result is not guaranteed to be accurate.
-    Reciprocal condition number2.067016e-17
-      overwrite_a=True).T
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\linear_model\ridge.py:112: LinAlgWarning: scipy.linalg.solve
-    Ill-conditioned matrix detected. Result is not guaranteed to be accurate.
-    Reciprocal condition number2.052585e-17
-      overwrite_a=True).T
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\linear_model\ridge.py:112: LinAlgWarning: scipy.linalg.solve
-    Ill-conditioned matrix detected. Result is not guaranteed to be accurate.
-    Reciprocal condition number2.122328e-17
-      overwrite_a=True).T
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\linear_model\ridge.py:112: LinAlgWarning: scipy.linalg.solve
-    Ill-conditioned matrix detected. Result is not guaranteed to be accurate.
-    Reciprocal condition number2.135002e-17
-      overwrite_a=True).T
-    
-
 
 
 ```python
@@ -1305,10 +2265,6 @@ plt.xticks(depths);
 plt.title('Decision Tree Classifier as Baseline',fontsize=14)
 plt.show()
 ```
-
-
-
-![png](EDA_combined_files/EDA_combined_66_0.png)
 
 
 
@@ -1367,93 +2323,6 @@ add_to_scores('RandomForestRegressor', training_score, test_score)
 ```python
 scores.head(20)
 ```
-
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Method</th>
-      <th>Training score</th>
-      <th>Test score</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>LinearRegression</td>
-      <td>0.885915</td>
-      <td>0.857309</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>RidgeCV</td>
-      <td>0.885272</td>
-      <td>0.859498</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>LassoCV</td>
-      <td>0.872684</td>
-      <td>0.864085</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>ElasticNetCV</td>
-      <td>0.875634</td>
-      <td>0.862735</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>DecisionTreeRegressor</td>
-      <td>0.906364</td>
-      <td>0.801545</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>AdaBoostRegressor</td>
-      <td>0.754827</td>
-      <td>0.729295</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>BaggingRegressor</td>
-      <td>0.972305</td>
-      <td>0.869813</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>GradientBoostingRegressor</td>
-      <td>0.958440</td>
-      <td>0.876261</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>RandomForestRegressor</td>
-      <td>0.972960</td>
-      <td>0.861661</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
 
 
 Table above shows that we can have highly perfomant models predicting the current CDRSB score. We can easily explain above $87$\% of the variance with Random Forest ($87.0$\%), Gradient Boosting ($88.1$\%), and Bagging ($90.0$\%).
@@ -1539,69 +2408,6 @@ add_to_diag_scores('RandomForestClassifier', training_score, test_score)
 ```python
 scores_diag.head(20)
 ```
-
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Method</th>
-      <th>Training accuracy</th>
-      <th>Test accuracy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>LogisticRegression</td>
-      <td>0.627890</td>
-      <td>0.633929</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>AdaBoostClassifier</td>
-      <td>0.808352</td>
-      <td>0.809524</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>BaggingClassifier</td>
-      <td>0.994034</td>
-      <td>0.886905</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>GradientBoostingClassifier</td>
-      <td>0.996271</td>
-      <td>0.907738</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>RandomForestClassifier</td>
-      <td>0.996271</td>
-      <td>0.875000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
 
 
 Similar to the regression on the current CDRSB score, with Bagging, Gradient Boosting, and Random Forest, we can predict the current diagnosis with an accuracy above $88$\%.
