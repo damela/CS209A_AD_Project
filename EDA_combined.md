@@ -10,60 +10,6 @@ notebook: EDA_combined.ipynb
 {: toc}
 
 
-Load libraries used in this notebook.
-
-
-
-```python
-'''IMPORT LIBRARIES'''
-
-import numpy as np
-import pandas as pd
-
-import statsmodels.api as sm
-from statsmodels.api import OLS
-
-from sklearn.decomposition import PCA
-from sklearn.linear_model import LinearRegression, RidgeCV, LassoCV, ElasticNetCV
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import AdaBoostRegressor, BaggingRegressor, GradientBoostingRegressor, RandomForestRegressor 
-from sklearn.ensemble import AdaBoostClassifier, BaggingClassifier, GradientBoostingClassifier, RandomForestClassifier
-from sklearn.linear_model import LogisticRegressionCV
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import MinMaxScaler
-
-import math
-from scipy.special import gamma
-
-import matplotlib
-import matplotlib.pyplot as plt
-%matplotlib inline
-import seaborn as sns
-sns.set()
-matplotlib.rcParams['figure.figsize'] = (13.0, 6.0)
-
-from IPython.display import display
-pd.set_option('display.max_columns', 999)
-pd.set_option('display.width', 500)
-sns.set_style('whitegrid')
-sns.set_context('talk')
-from matplotlib.backends.backend_pdf import PdfPages
-
-import pickle
-```
-
-
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\ensemble\weight_boosting.py:29: DeprecationWarning: numpy.core.umath_tests is an internal NumPy module and should not be imported. It will be removed in a future NumPy release.
-      from numpy.core.umath_tests import inner1d
-    
-
 ## Data Loading and Cleaning
 
 The data used for the project comes from the Alzheimer's Disease Neuroimaging Initiative (ADNI) database. For the exploratory data analysis (EDA), we have decided to explore the database $\texttt{ADNIMERGE.csv}$ which contains the studies ADNI1, ADNIGO, and ADNI2.
@@ -128,10 +74,9 @@ df = read_df(f)
 
 #Print only the first few rows and columns
 row_print = 5
-df.head(row_print)
+col = [v for v in df.columns.values if v not in ['FSVERSION','FSVERSION_bl']]
+display(df[col].head()
 ```
-
-
 
 
 
@@ -196,7 +141,6 @@ df.head(row_print)
       <th>EcogSPDivatt</th>
       <th>EcogSPTotal</th>
       <th>FLDSTRENG</th>
-      <th>FSVERSION</th>
       <th>Ventricles</th>
       <th>Hippocampus</th>
       <th>WholeBrain</th>
@@ -216,7 +160,6 @@ df.head(row_print)
       <th>RAVLT_perc_forgetting_bl</th>
       <th>FAQ_bl</th>
       <th>FLDSTRENG_bl</th>
-      <th>FSVERSION_bl</th>
       <th>Ventricles_bl</th>
       <th>Hippocampus_bl</th>
       <th>WholeBrain_bl</th>
@@ -295,7 +238,6 @@ df.head(row_print)
       <td>NaN</td>
       <td>NaN</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>118233.0</td>
       <td>8336.0</td>
       <td>1229740.0</td>
@@ -315,7 +257,6 @@ df.head(row_print)
       <td>54.5455</td>
       <td>0.0</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>118233.0</td>
       <td>8336.0</td>
       <td>1229740.0</td>
@@ -392,7 +333,6 @@ df.head(row_print)
       <td>NaN</td>
       <td>NaN</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>84599.0</td>
       <td>5319.0</td>
       <td>1129830.0</td>
@@ -412,7 +352,6 @@ df.head(row_print)
       <td>100.0000</td>
       <td>10.0</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>84599.0</td>
       <td>5319.0</td>
       <td>1129830.0</td>
@@ -489,7 +428,6 @@ df.head(row_print)
       <td>NaN</td>
       <td>NaN</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>88580.0</td>
       <td>5446.0</td>
       <td>1100060.0</td>
@@ -509,7 +447,6 @@ df.head(row_print)
       <td>100.0000</td>
       <td>10.0</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>84599.0</td>
       <td>5319.0</td>
       <td>1129830.0</td>
@@ -586,7 +523,6 @@ df.head(row_print)
       <td>NaN</td>
       <td>NaN</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>90099.0</td>
       <td>5157.0</td>
       <td>1095640.0</td>
@@ -606,7 +542,6 @@ df.head(row_print)
       <td>100.0000</td>
       <td>10.0</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>84599.0</td>
       <td>5319.0</td>
       <td>1129830.0</td>
@@ -683,7 +618,6 @@ df.head(row_print)
       <td>NaN</td>
       <td>NaN</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>97420.0</td>
       <td>5139.0</td>
       <td>1088560.0</td>
@@ -703,7 +637,6 @@ df.head(row_print)
       <td>100.0000</td>
       <td>10.0</td>
       <td>1.5 Tesla MRI</td>
-      <td>Cross-Sectional FreeSurfer (FreeSurfer Version...</td>
       <td>84599.0</td>
       <td>5319.0</td>
       <td>1129830.0</td>
@@ -738,7 +671,6 @@ df.head(row_print)
   </tbody>
 </table>
 </div>
-
 
 
 First, let us take a look at the columns. Let us see how many we have and what are their names.
@@ -1800,12 +1732,6 @@ df_cdrsb = df_cdrsb[pd.notna(df_clean['CDRSB_Baseline'])]
 df_cdrsb = df_cdrsb[pd.notna(df_clean['CDRSB_delta'])]
 ```
 
-
-    C:\Users\david\Anaconda3\lib\site-packages\ipykernel_launcher.py:83: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
-    C:\Users\david\Anaconda3\lib\site-packages\ipykernel_launcher.py:87: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
-    C:\Users\david\Anaconda3\lib\site-packages\ipykernel_launcher.py:88: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
-    
-
 ## Exploration of Missingness
 
 One of the challenges with medical studies is the presence of various types of missing data. For example, some patients might have been tested more often than others based on their condition. To investigate this, we generated histograms of the number of visits per patients. The Figure below shows both the overall number of visits and the distribution by final diagnosis.
@@ -1899,6 +1825,10 @@ plt.grid(False)
 ```
 
 
+
+![png](EDA_combined_files/EDA_combined_31_0.png)
+
+
 Similar to the distribution of the number of visits by diagnosis, we can conclude from the plot above that there is no clear trend between number of visits, final CDRSB score, and diagnosis. We do not have evidence of missing data of type MAR.
 
 We also need to investigate the missingness in the predictors and across different protocols (ADNI1, ADNIGO, and ADNI2). To visualize this, we can plot the number of observations (not null and not NaN) for each of the predictors separated by protocol.
@@ -1934,6 +1864,10 @@ plt.subplots_adjust(top=0.93);
 ```
 
 
+
+![png](EDA_combined_files/EDA_combined_34_0.png)
+
+
 Across all protocols, demographic predictors (bottom of the Figure above) and cognitive test predictors (FAQ, RAVLT, etc.) have almost no missing data. In comparison, imaging predictors such as PET scan images AV45, PIB, and FDG as well as brain images (top of Figure above) have a lot of missing data. The Ecog-related predictors (middle of Figure above) only appeared after ADNI1 (and contain many missing $\texttt{delta}$ values ADNIGO and ADNI2). Except for these predictors, all other predictors seem to have similar missing daa among the 3 protocols. 
 
 ## Exploration of Response Variables
@@ -1959,6 +1893,10 @@ plt.title('Diagnosis distribution at first and last visit');
 ```
 
 
+
+![png](EDA_combined_files/EDA_combined_38_0.png)
+
+
 The above bar plot does not tell us the transition from one category to the other, but rather the porportions at baseline and final visit. To understand how the categories are changing, we can look at a cross table.
 
 
@@ -1967,6 +1905,63 @@ The above bar plot does not tell us the transition from one category to the othe
 '''CROSS-TABLE OF DIAGNOSIS TRANSITION'''
 pd.crosstab(df_diagnosis.Diagnosis_Baseline, df_diagnosis.Diagnosis)
 ```
+
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Diagnosis</th>
+      <th>AD</th>
+      <th>CN</th>
+      <th>MCI</th>
+    </tr>
+    <tr>
+      <th>Diagnosis_Baseline</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AD</th>
+      <td>1079</td>
+      <td>0</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>CN</th>
+      <td>57</td>
+      <td>2544</td>
+      <td>210</td>
+    </tr>
+    <tr>
+      <th>MCI</th>
+      <td>972</td>
+      <td>202</td>
+      <td>3835</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 A large proportion of patients diagnosed with CN at baseline stayed CN ($91$%). For the patients diagnosed with MCI at baseline, about $19$% of them were diagnosed with AD after the study, $77$% stayed MCI, and $4$ went back to CN. Finally, for patients diagnosed with AD at baseline, $1$% of them went back to MCI and no patient went back to CN. This makes sense as AD is non-curable and degenerative.
@@ -1994,6 +1989,10 @@ leg = plt.legend()
 for lh in leg.legendHandles: 
     lh.set_alpha(1)
 ```
+
+
+
+![png](EDA_combined_files/EDA_combined_42_0.png)
 
 
 We note the following key points:
@@ -2063,6 +2062,10 @@ plt.subplots_adjust(top=0.85)
 ```
 
 
+
+![png](EDA_combined_files/EDA_combined_45_0.png)
+
+
 While the first two plots in the Figure above show that there is a clear difference in the distribution of the CDRSB score with respect to different diagnosis, the third plot could represent a very simple classifier of the final diagnosis based on the initial CDRSB score. The classifier would be:
 
 
@@ -2107,6 +2110,10 @@ plt.tick_params(labelsize=10)
 plt.xlim(0,1);
 plt.title('Correlation factor');
 ```
+
+
+
+![png](EDA_combined_files/EDA_combined_50_0.png)
 
 
 The results shown in the bar plot above are promising since a lot of inexpensive cognitive tests such as FAQ, Ecog, ADAS, and MOCA have high correlation to CDRSB. They represent good alternative to more expensive and time consuming imaging data such as FDG and Hippocampus.
@@ -2211,8 +2218,6 @@ add_to_scores('RidgeCV', training_score, test_score)
 ```
 
 
-
-
 ```python
 '''LASSO REGULARIZATION'''
 lasso = LassoCV(cv=5, alphas = [0.001, 0.01, 0.1, 1]).fit(X_cdrsb_train, y_cdrsb_train)
@@ -2265,6 +2270,10 @@ plt.xticks(depths);
 plt.title('Decision Tree Classifier as Baseline',fontsize=14)
 plt.show()
 ```
+
+
+
+![png](EDA_combined_files/EDA_combined_66_0.png)
 
 
 
@@ -2325,7 +2334,94 @@ scores.head(20)
 ```
 
 
-Table above shows that we can have highly perfomant models predicting the current CDRSB score. We can easily explain above $87$\% of the variance with Random Forest ($87.0$\%), Gradient Boosting ($88.1$\%), and Bagging ($90.0$\%).
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Method</th>
+      <th>Training score</th>
+      <th>Test score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LinearRegression</td>
+      <td>0.885915</td>
+      <td>0.857309</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>RidgeCV</td>
+      <td>0.885272</td>
+      <td>0.859498</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>LassoCV</td>
+      <td>0.872684</td>
+      <td>0.864085</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>ElasticNetCV</td>
+      <td>0.875634</td>
+      <td>0.862735</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>DecisionTreeRegressor</td>
+      <td>0.906364</td>
+      <td>0.801545</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>AdaBoostRegressor</td>
+      <td>0.768586</td>
+      <td>0.734066</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>BaggingRegressor</td>
+      <td>0.974058</td>
+      <td>0.880795</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>GradientBoostingRegressor</td>
+      <td>0.958440</td>
+      <td>0.876421</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>RandomForestRegressor</td>
+      <td>0.974297</td>
+      <td>0.876043</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+Table above shows that we can have highly perfomant models predicting the current CDRSB score. We can easily explain above $87$% of the variance with Random Forest ($87.0$%), Gradient Boosting ($88.1$%), and Bagging ($90.0$%).
 
 ### Predict Diagnosis with Classification
 
@@ -2410,6 +2506,69 @@ scores_diag.head(20)
 ```
 
 
-Similar to the regression on the current CDRSB score, with Bagging, Gradient Boosting, and Random Forest, we can predict the current diagnosis with an accuracy above $88$\%.
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Method</th>
+      <th>Training accuracy</th>
+      <th>Test accuracy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LogisticRegression</td>
+      <td>0.627890</td>
+      <td>0.633929</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>AdaBoostClassifier</td>
+      <td>0.808352</td>
+      <td>0.809524</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>BaggingClassifier</td>
+      <td>0.993289</td>
+      <td>0.892857</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>GradientBoostingClassifier</td>
+      <td>0.996271</td>
+      <td>0.910714</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>RandomForestClassifier</td>
+      <td>0.997763</td>
+      <td>0.880952</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+Similar to the regression on the current CDRSB score, with Bagging, Gradient Boosting, and Random Forest, we can predict the current diagnosis with an accuracy above $88$%.
 
 It seems we can acheive high performance when predicting current response variables. In the following sections, we will highlight the increased level of difficulty associated with the prediction of future data.
