@@ -16,6 +16,6 @@ Longitudinal multicenter investigations, such as the Alzheimer's Disease Neuroim
 
 The project overarching goal is to predict over time if a patient will develop AD. We are especially concerned about accurate, fast, and inexpensive detection. The goals can be formulated as follows:
 
-1. Based on data at the first visit, predict the 
+1. Based on data at the first visit, predict the progression of the disease
 2. Investigate the accuracy of the model as a function of the number of visits
 3. Investigate the accuracy of the model as a function of the feature selection
