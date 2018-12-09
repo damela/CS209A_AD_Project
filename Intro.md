@@ -49,7 +49,7 @@ _Regression Methods:_
 
 As subset of derived variable analsysis, regression methods seek to fit a regression to the longitudinal response of each individual patient (see figure below as an example) and then use the parameters of these regressions as predictors/responses in the overall analysis [6]. This technique allows for highly interpretable derived variables that can be directly related to the longitudinal response of a particular patient. One variant of a regression method was applied to the ADNI dataset as part of our analysis.
 
-<img src="RegressionMethodsExample.png" width="500">
+<img src="notebooks/RegressionMethodsExample.png" width="500">
 <p style="margin-left:20em;margin-right:20em;"> Example of a regression method, in which linear models are fit to each individual patient's longitudinal response. Figure duplicated from [4].</p>
 
 ### Missing Data
