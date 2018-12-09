@@ -28,8 +28,10 @@ In answering the question of if a patient will have AD, in this project, we hope
 
 [1]https://www.nia.nih.gov/health/alzheimers-disease-fact-sheet
 
+
 [2]https://www.nia.nih.gov/health/biomarkers-dementia-detection-and-research#types
 
+aadasdasdasdasd
 [3]https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2685260/?fbclid=IwAR3E4Jw50RGeg8ubqoCXWXP2w0u4JdEXb6LVThYlcZfWxSq1B9IwDc88Sx4
 
 ## How to Model Longitudinal Data in Medical Studies
