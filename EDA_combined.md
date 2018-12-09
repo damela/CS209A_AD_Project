@@ -12,6 +12,8 @@ notebook: EDA_combined.ipynb
 
 Load libraries used in this notebook.
 
+
+
 ```python
 '''IMPORT LIBRARIES'''
 
@@ -57,6 +59,10 @@ from matplotlib.backends.backend_pdf import PdfPages
 import pickle
 ```
 
+
+    C:\Users\david\Anaconda3\lib\site-packages\sklearn\ensemble\weight_boosting.py:29: DeprecationWarning: numpy.core.umath_tests is an internal NumPy module and should not be imported. It will be removed in a future NumPy release.
+      from numpy.core.umath_tests import inner1d
+    
 
 ## Data Loading and Cleaning
 
@@ -761,6 +767,7 @@ bins = np.arange(1,13,1)
 
 #First axis is the total number of visits by patient
 axes[0].hist(numVisits_overall,bins=bins,align='left',color='black',density=True)
+axes[0].set_xticks(range(1,12))
 axes[0].set_xlabel('Number of visits per Patient')
 axes[0].set_ylabel('Frequency')
 axes[0].set_title('Overall')
@@ -770,6 +777,7 @@ axes[0].grid(False)
 axes[1].hist(numVisits_AD,bins=bins,align='left',color='r',density=True,alpha=0.3)
 axes[1].hist(numVisits_MCI,bins=bins,align='left',color='g',density=True,alpha=0.3)
 axes[1].hist(numVisits_CN,bins=bins,align='left',color='b',density=True,alpha=0.3)
+axes[1].set_xticks(range(1,12))
 axes[1].set_xlabel('Number of visits per Patient')
 axes[1].set_ylabel('Frequency')
 axes[1].set_title('By Diagnosis')
@@ -892,7 +900,7 @@ plt.xlabel('Diagnosis')
 plt.ylabel('Counts')
 plt.xticks(gridnumber,finalDiagnosis_df.groupby('Diagnosis_Baseline').size().index.values);
 plt.grid(False)
-plt.title('Diagnosis transition between first and last visit');
+plt.title('Diagnosis distribution at first and last visit');
 ```
 
 
@@ -900,7 +908,7 @@ plt.title('Diagnosis transition between first and last visit');
 ![png](EDA_combined_files/EDA_combined_38_0.png)
 
 
-The above bar plot does not tell us the migration from one category to the other, but rather the porportions at baseline and final visit. To understand how the categories are changing, we can look at a cross table.
+The above bar plot does not tell us the transition from one category to the other, but rather the porportions at baseline and final visit. To understand how the categories are changing, we can look at a cross table.
 
 
 
@@ -967,7 +975,7 @@ pd.crosstab(df_diagnosis.Diagnosis_Baseline, df_diagnosis.Diagnosis)
 
 
 
-A large proportion of patients diagnosed with CN at baseline stayed CN ($91$\%). For the patients diagnosed with MCI at baseline, about $19$\% of them were diagnosed with AD after the study, $77$\% stayed MCI, and $4$ went back to CN. Finally, for patients diagnosed with AD at baseline, $1$\% of them went back to MCI and no patient went back to CN. This makes sense as AD is non-curable and degenerative.
+A large proportion of patients diagnosed with CN at baseline stayed CN ($91$%). For the patients diagnosed with MCI at baseline, about $19$% of them were diagnosed with AD after the study, $77$% stayed MCI, and $4$ went back to CN. Finally, for patients diagnosed with AD at baseline, $1$% of them went back to MCI and no patient went back to CN. This makes sense as AD is non-curable and degenerative.
 
 For the numerical response variable CDRSB, we can explore its progression from the first visit to the last visit. We can plot the final CDRSB score as a function of the baseline CDRSB score color-coded by diagnosis.
 
@@ -1416,31 +1424,31 @@ scores.head(20)
       <th>0</th>
       <td>DecisionTreeRegressor</td>
       <td>0.906364</td>
-      <td>0.825381</td>
+      <td>0.801545</td>
     </tr>
     <tr>
       <th>0</th>
       <td>AdaBoostRegressor</td>
-      <td>0.768270</td>
-      <td>0.726817</td>
+      <td>0.754827</td>
+      <td>0.729295</td>
     </tr>
     <tr>
       <th>0</th>
       <td>BaggingRegressor</td>
-      <td>0.974780</td>
-      <td>0.879723</td>
+      <td>0.972305</td>
+      <td>0.869813</td>
     </tr>
     <tr>
       <th>0</th>
       <td>GradientBoostingRegressor</td>
       <td>0.958440</td>
-      <td>0.875221</td>
+      <td>0.876261</td>
     </tr>
     <tr>
       <th>0</th>
       <td>RandomForestRegressor</td>
-      <td>0.978864</td>
-      <td>0.877697</td>
+      <td>0.972960</td>
+      <td>0.861661</td>
     </tr>
   </tbody>
 </table>
@@ -1575,20 +1583,20 @@ scores_diag.head(20)
     <tr>
       <th>0</th>
       <td>BaggingClassifier</td>
-      <td>0.991797</td>
-      <td>0.892857</td>
+      <td>0.994034</td>
+      <td>0.886905</td>
     </tr>
     <tr>
       <th>0</th>
       <td>GradientBoostingClassifier</td>
-      <td>0.995526</td>
-      <td>0.916667</td>
+      <td>0.996271</td>
+      <td>0.907738</td>
     </tr>
     <tr>
       <th>0</th>
       <td>RandomForestClassifier</td>
-      <td>0.992543</td>
-      <td>0.889881</td>
+      <td>0.996271</td>
+      <td>0.875000</td>
     </tr>
   </tbody>
 </table>
