@@ -8,9 +8,9 @@ title: Alzheimer's Disease and Cognitive Impairment Prediction
 
 ## Project Statement
 
-Alzheimer's disease (AD) is a neurodegenerative disease associated with slow decrease of mental functions. Most commonly, the disease appears after $65$ years of age and affect about $6$% of people [Ref?]. The causes of AD are still not well understood and no treatment has yet been discovered. In addition to the human impact it provokes, AD is also one of the most costly dieases in the United States due to the long-term care it requires.
+Alzheimer's disease (AD) is a neurodegenerative disease associated with slow decrease of mental functions. Most commonly, the disease appears after $65$ years of age and affect about $6$% of people. The causes of AD are still not well understood and no treatment has yet been discovered. In addition to the human impact it provokes, AD is also one of the most costly dieases in the United States due to the long-term care it requires.
 
-Longitudinal multicenter investigations, such as the Alzheimer's Disease Neuroimaging Initiative (ADNI), are bringing a paradigm shift in the analysis of AD. These studies enable generation of large databases of patients demographics, medical history, lab record, cognitive test score, imaging data, etc. In this project, based on the ADNI database, we develop data-driven models to analyze and predict AD.
+Longitudinal multicenter investigations, such as the Alzheimer's Disease Neuroimaging Initiative (ADNI), are bringing a paradigm shift in the analysis of AD. These studies enable generation of large databases of patients information such as demographics, medical history, lab record, cognitive test score, and imaging data. In this project, based on the ADNI database, we develop data-driven models to analyze and predict AD.
 
 ## Project Goals
 
