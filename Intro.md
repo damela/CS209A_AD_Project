@@ -52,7 +52,7 @@ As subset of derived variable analsysis, regression methods seek to fit a regres
 <p align="center">
 	<img src="notebooks/RegressionMethodsExample.png" width="500">
 </p>
-<p style="margin-left:16em;margin-right:16em;"> Example of a regression method, in which linear models are fit to each individual patient's longitudinal response. Figure duplicated from [4].</p>
+<p style="margin-left:18em;margin-right:16em;"> Example of a regression method, in which linear models are fit to each individual patient's longitudinal response. Figure duplicated from [4].</p>
 
 
 ### Missing Data
