@@ -1,41 +1,13 @@
+---
+nav_include: 3
+title: Models
+notebook: Models_combined.ipynb
+---
 
-# Models
-
-
-
-```python
-'''IMPORT THE LIBRARIES'''
-import numpy as np
-import pandas as pd
-
-from sklearn.linear_model import LinearRegression, RidgeCV, LassoCV, ElasticNetCV
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import AdaBoostRegressor, BaggingRegressor, GradientBoostingRegressor, RandomForestRegressor 
-from sklearn.ensemble import AdaBoostClassifier, BaggingClassifier, GradientBoostingClassifier, RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, mean_squared_error, confusion_matrix
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.neighbors.kde import KernelDensity
-
-import matplotlib
-import matplotlib.pyplot as plt
-%matplotlib inline
-
-import seaborn as sns
-sns.set()
-matplotlib.rcParams['figure.figsize'] = (13.0, 6.0)
-
-from time import clock
-
-# Aesthetic settings
-from IPython.display import display
-pd.set_option('display.max_columns', 999)
-pd.set_option('display.width', 500)
-sns.set_style('whitegrid')
-sns.set_context('talk')
-
-from collections import defaultdict
-```
+## Contents
+{:.no_toc}
+*  
+{: toc}
 
 
 ## Modeling Longitudinal Component of the Data
@@ -47,82 +19,6 @@ Let us recall the objective of the project: predict over time CDRSB score and di
 ### Progression of CDRSB over Time
 
 We can plot the progression of the CDRSB score over time for a subset of patients.
-
-
-
-```python
-'''LOAD THE DATABASE'''
-f = 'ADNIDataFiles/ADNIMERGE.csv'
-df = pd.read_csv(f)
-```
-
-
-
-
-```python
-'''CLEAN THE DATABASE'''
-
-# Work on a copy of the raw df
-df_dummy = df.copy()
-
-#Create a new cleaned df
-df_clean = pd.DataFrame()
-
-#Diagnosis
-df_clean['Diagnosis'] = df_dummy.DX.replace({'Dementia':'AD'})
-
-#CDRSB
-df_clean['CDRSB'] = df_dummy.CDRSB
-
-#Patient ID
-df_clean['ID'] = pd.Categorical(df_dummy.PTID)
-df_clean.ID = df_clean.ID.cat.codes
-
-#Age at each visit
-df_dummy.EXAMDATE = pd.to_datetime(df_dummy['EXAMDATE'])
-df_dummy['FIRSTDATE'] = df_dummy.groupby('PTID')['EXAMDATE'].transform(min)
-df_dummy['TIMESINCEFIRST'] = (df_dummy.EXAMDATE - df_dummy.FIRSTDATE).dt.days
-df_clean['AGE'] = df_dummy.AGE + df_dummy.TIMESINCEFIRST/365.
-df_clean['TIME'] = df_dummy.TIMESINCEFIRST/365
-
-#Gender one-hot encoding on female
-df_clean['Female'] = pd.get_dummies(df_dummy.PTGENDER)['Female']
-
-#Education years
-df_clean['Education'] = df_dummy.PTEDUCAT
-
-#Ethicity one-hot encoding on unknown
-df_clean[['Hispanic','Non_Hispanic']] = pd.get_dummies(df_dummy.PTETHCAT)[['Hisp/Latino','Not Hisp/Latino']]
-
-#Race as categorical data
-df_clean['Race'] = pd.Categorical(df_dummy.PTRACCAT)
-
-#Race as categorical data
-df_clean['Marital_status'] = pd.Categorical(df_dummy.PTMARRY)
-
-#Gene APOE4 (Important gene with different types)
-df_clean['APOE4'] = pd.Categorical(df_dummy.APOE4)
-
-#FDG (PET scan marker)
-# df_clean['FDG'] = df_dummy.FDG
-
-#Create a list of predictors for which we want to calculate delta
-# REMOVE SOFTWARE AND FIELD STRENGHT
-remainingColumns = ['ADAS11', 'ADAS13', 'MMSE', 'RAVLT_immediate',
- 'RAVLT_learning', 'RAVLT_forgetting', 'RAVLT_perc_forgetting', 'FAQ', 'MOCA',
- 'EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', 'EcogPtPlan', 'EcogPtOrgan',
- 'EcogPtDivatt', 'EcogPtTotal', 'EcogSPMem', 'EcogSPLang', 'EcogSPVisspat',
- 'EcogSPPlan', 'EcogSPOrgan', 'EcogSPDivatt', 'EcogSPTotal',
- 'Ventricles', 'Hippocampus', 'WholeBrain', 'Entorhinal',
- 'Fusiform', 'MidTemp', 'ICV']
-
-for c in remainingColumns:
-    df_clean[c] = df_dummy[c]
-    
-df_clean = df_clean[pd.notna(df_clean['CDRSB'])]
-```
-
-
 
 
 ```python
@@ -234,12 +130,6 @@ for i,row in df_clean.iterrows():
 ```
 
 
-    C:\Users\kb1ud\Anaconda2\envs\py36\lib\site-packages\ipykernel_launcher.py:26: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
-    To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
-    C:\Users\kb1ud\Anaconda2\envs\py36\lib\site-packages\ipykernel_launcher.py:34: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
-    To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
-    
-
 ### Dictionary of Dataframes
 
 A critical objective of the final model is early detection. Ideally, the model would predict with high accuracy the CDRSB score and diagnosis over time after the first few visits and with the least expensive feature subset. Therefore, we built a table of dataframes to explore the impact of (1) number and timing of visits after the baseline, and (2) feature subset selection. During the study, the smallest increment of time between visits was approximately $6$ months. Given that longest any patient ever remained in the study was $11$ years, there are a maximum of $23$ possible half-year increments at which data might be present. The table of dataframes has dimensions $m \times n$ where $m$ is equal to $23$ and $n$ is equal to $4$ (different subsets of feature) that we split in the following way:
@@ -258,7 +148,6 @@ Let us prepare the split of the different feature subsets.
 ```python
 '''FEATURE SUBSETS'''
 
-# split up different groups of columns
 imaging_columns = ['ICV','MidTemp','Fusiform','Entorhinal','WholeBrain','Hippocampus','Ventricles'] #removed FDG!
 ecog_columns = ['EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', 'EcogPtPlan',
                 'EcogPtOrgan', 'EcogPtDivatt', 'EcogPtTotal', 'EcogSPMem',
@@ -272,7 +161,6 @@ for v in visits:
 standard_columns = list(set(df_clean.columns.values) - set(imaging_columns) - set(ecog_columns) \
                         - set(slope_columns) - set(final_columns))
 
-# subsets of columns to assemble for different models
 subsets = []
 subsets.append(standard_columns + final_columns)
 subsets.append(standard_columns + final_columns + ecog_columns)
@@ -288,7 +176,6 @@ We can now create the dictionary of dataframes to explore the impact of the time
 ```python
 '''DICTIONARY OF DFS'''
 
-# compile into a useful dictionary structure of dataframes for use later
 dfs = defaultdict(dict)
 visits_new = np.linspace(0.,11.,23)
 n_subsets = len(subsets)
@@ -526,47 +413,6 @@ for i in range(n_subset):
 We first start investigating how well we can predict the CDRSB slope, the future CDRSB, and the future diagnosis with the original dataframes without hyper-parameter tuning. Given the high performance of Random Forest in the EDA, we decided to limit our analysis to this model, moving forward. We can first plot the relation between the model scores ($R^2$ on the CDRSB slope, MSE on the final CDRSB, and accuracy on the final diagnosis) as a function of the timing of the follow up visits for different feature subsets.
 
 
-
-```python
-# ''''BASELINE MODELS'''
-
-# #Loop over time and the subsets
-# n_years = [10,10,8,7]
-# subsets = [0,1,2,3]
-
-# #Set up the figure
-# fig,axs = plt.subplots(nrows=3,ncols=4,sharex=True,sharey='row',figsize=(15,10))
-
-# axs_subs = []
-# axs_subs.append([axs[0,0],axs[1,0],axs[2,0]])
-# axs_subs.append([axs[0,1],axs[1,1],axs[2,1]])
-# axs_subs.append([axs[0,2],axs[1,2],axs[2,2]])
-# axs_subs.append([axs[0,3],axs[1,3],axs[2,3]])
-
-# #Run model and plot figure
-# for f in subsets:
-#     years = [0,0.5]+list(np.linspace(1,n_years[f],n_years[f]))
-#     test_score = np.zeros(len(years))
-#     train_score = np.zeros(len(years))
-#     cdrsb_error_train = np.zeros(len(years))
-#     cdrsb_error_test = np.zeros(len(years))
-#     diagnosis_error_train = np.zeros(len(years))
-#     diagnosis_error_test = np.zeros(len(years))
-#     for i,s in enumerate(years):
-#         a,train_score[i],test_score[i],cdrsb_error_train[i],cdrsb_error_test[i],\
-#         diagnosis_error_train[i],diagnosis_error_test[i]=\
-#         run_model(Xs[f][s],ys[f][s],assessments[f][s])
-#     title = 'subset '+str(f)
-#     axs_subs[f] = plotModelPerformance(axs_subs[f],title,years,train_score,test_score,cdrsb_error_train,\
-#                                cdrsb_error_test,diagnosis_error_train,diagnosis_error_test,includey=(f==0))
-# plt.tight_layout()
-# plt.suptitle('Baseline Models Based on Time and Subset Selection',fontsize='20')
-# plt.subplots_adjust(top=0.9);
-```
-
-
-
-
 ```python
 '''BASELINE HEATMAP'''
 
@@ -661,42 +507,6 @@ where $k(f_i)$ is the value of the kernel estimate varying with the final time o
 These sample weight coefficients are implemented in the function $\texttt{run_model}$.
 
 
-
-```python
-# '''HEATMAPS OF THE WEIGHTED MODELS'''
-
-# #Declare properties to map
-# cdrsb_error_mat = np.zeros((12,4))
-# R2_mat = np.zeros((12,4))
-# diagnosis_accuracy_mat = np.zeros((12,4))
-# years = [0,0.5]+list(np.linspace(1,10,10))
-
-# #Hyper-parameters
-# p = 2
-# b = .5
-
-# #Compute property matrices
-# for i in range(4):
-#     for j,y in enumerate(years):
-#         numNonFinalPatients = sum((assessments[i][y]['TIME'] - assessments[i][y]['final_time'])!=0)
-#         if numNonFinalPatients > 10:
-#             _,_,R2_mat[j][i],_,cdrsb_error_mat[j][i],\
-#             _,diagnosis_accuracy_mat[j][i]=\
-#             run_model(Xs[i][y],ys[i][y],assessments[i][y],weight=p,bandwidth=b,kernel_opt=True)
-#         else:
-#             cdrsb_error_mat[j][i] = np.NaN
-#             R2_mat[j][i] = np.NaN
-#             diagnosis_accuracy_mat[j][i] = np.NaN
-            
-# #Plot heatmaps
-# fig,axes = plt.subplots(ncols=3,nrows=1,figsize=(15,10))
-# plotHeatMap(R2_mat,axes[0],'$R^2$ of CDRSB Slope')
-# plotHeatMap(cdrsb_error_mat,axes[1],'CDRSB Mean-Squared-Error',reverse=True)
-# plotHeatMap(diagnosis_accuracy_mat,axes[2],'Final Diagnosis Accuracy')
-# plt.suptitle('Heatmaps of Weighted Models',fontsize=20);
-```
-
-
 ### Improving Baseline Model: Hyper-Parameter Tuning
 
 With Random Forest and our implemented sample weight coefficients, we now have now introduced a number of hyper-parameters that can be tuned to improve model performance. We will tune the following $4$ different hyper-parameters with the tested values in parentheses.
@@ -729,51 +539,21 @@ best_params = defaultdict(dict)
 years = [0,0.5]+list(np.linspace(1,10,10))
 
 #Perform grid search
-# t0 = clock()
-# for subset in range(4):
-#     for y in years:
-#         numNonFinalPatients = sum((assessments[subset][y]['TIME'] - assessments[subset][y]['final_time'])!=0)
-#         if  numNonFinalPatients > 10:
-#             best_cdrsb_error[subset][y], best_diagnosis_accuracy[subset][y], \
-#             best_R2[subset][y], best_params[subset][y] = \
-#             GridSearch(max_depths,weights,bandwidths,n_estimators,subset,y)
-#             print((subset,y,clock()-t0,'Successful'))
-#         else:
-#             best_cdrsb_error[subset][y] = np.NaN
-#             best_diagnosis_accuracy[subset][y] = np.NaN
-#             best_R2[subset][y] = np.NaN
-#             best_params[subset][y] = np.NaN
-#             print((subset,y,clock()-t0,'Too few people'))
-```
-
-
-
-
-```python
-'''SAVE ENVIRONMENT'''
-
-#Grid search is long so we save results ...
-# import pickle
-# with open('grid_search.pkl','wb') as f:
-#     pickle.dump([best_cdrsb_error,best_diagnosis_accuracy,best_R2,best_params],f)
-```
-
-
-
-
-
-    'SAVE ENVIRONMENT'
-
-
-
-
-
-```python
-'''LOAD ENVIRONMENT'''
-import pickle
-with open('grid_search.pkl','rb') as f:
-    best_cdrsb_error,best_diagnosis_accuracy,best_R2,best_params =pickle.load(f)
-
+t0 = clock()
+for subset in range(4):
+    for y in years:
+        numNonFinalPatients = sum((assessments[subset][y]['TIME'] - assessments[subset][y]['final_time'])!=0)
+        if  numNonFinalPatients > 10:
+            best_cdrsb_error[subset][y], best_diagnosis_accuracy[subset][y], \
+            best_R2[subset][y], best_params[subset][y] = \
+            GridSearch(max_depths,weights,bandwidths,n_estimators,subset,y)
+            print((subset,y,clock()-t0,'Successful'))
+        else:
+            best_cdrsb_error[subset][y] = np.NaN
+            best_diagnosis_accuracy[subset][y] = np.NaN
+            best_R2[subset][y] = np.NaN
+            best_params[subset][y] = np.NaN
+            print((subset,y,clock()-t0,'Too few people'))
 ```
 
 
@@ -856,7 +636,6 @@ Finally, we want to investigate the number of false positives/negatives in our f
 ```python
 '''PLOT CONFUSION MATRIX OF FINAL DIAGNOSIS PREDICTIONS'''
 
-# Generate final diagnosis predictions
 X = Xs[s_best][y_best]
 y = ys[s_best][y_best]
 assessment = assessments[s_best][y_best]
@@ -867,7 +646,6 @@ cdrsb_pred_test  = \
 diagnosis_pred_test = ['CN' if i  <0.5 else 'MCI' if i < 4. else 'AD' for i in cdrsb_pred_test]
 
 
-# Generate and plot confusion matrix
 cm = confusion_matrix(assessment_test['final_diagnosis'],diagnosis_pred_test,labels=['CN','MCI','AD'])
 cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 plt.imshow(cm,cmap=plt.get_cmap('Blues'))
