@@ -1,4 +1,5 @@
 ---
+---
 nav_include: 3
 title: Models
 notebook: Models_combined.ipynb
@@ -56,7 +57,7 @@ As previously discussed, in the development of a predictive model based on medic
 
 Let us recall the objective of the project: predict over time CDRSB score and diagnosis.
 
-### Progression of CDRSB ver Time
+### Progression of CDRSB over Time
 
 We can plot the progression of the CDRSB score over time for a subset of patients.
 
@@ -166,15 +167,15 @@ where $t$ is time, $m$ is the slope, and $CDRSB_0$ is the baseline score.
 
 ### New Response Variable: CDRSB Slope
 
-To remove the longitudinal component of the data, we engineer the features $m = \texttt{slope_overall}$ as well as $m_i = \texttt{slope}_i$ where $i$ correspond to the $i$-th visit. The response variable becomes $\texttt{slope_overall}$ and the CDRSB score is predicted based on the formula above. Finally, the diagnosis is predicted from the classifier discussed in the EDA
+To remove the longitudinal component of the data, we engineer the features $m = \texttt{slope_overall}$ as well as $m_i = \texttt{slope}_i$ where $i$ correspond to the $i$-th year since baseline. The response variable becomes $\texttt{slope_overall}$ and the CDRSB score is predicted based on the formula above. Finally, the diagnosis is predicted from the classifier discussed in the EDA
 
-- CDRSB $\le 0$: Final diagnosis is CN
-- $0 <$ CDRSB$ < 4.0$: Final diagnosis is MCI
-- CDRSB$\ge 4.0$: Final diagnosis is AD
+* CDRSB $< .5$: Final diagnosis is CN
+* $0.5 \le$ CDRSB$ < 4.0$: Final diagnosis is MCI
+* CDRSB$\ge 4.0$: Final diagnosis is AD
 
 ### Feature Engineering
 
-First, we add the new features to the main dataframe. In addition to computing the overall CDRSB slope, we also compute the current slope at each increment of time for each patient.
+First, we add the new features to the main dataframe. In addition to computing the overall CDRSB slope, we also compute an incremental slope estimate at each visit for each patient.
 
 
 
@@ -251,14 +252,14 @@ for i,row in df_clean.iterrows():
 
 ### Dictionary of Dataframes
 
-!!!! EXPLAIN BETTER THE CURRENT SLOPE DFS? !!!!!!
-
-A critical objective of the final model is early detection. Ideally, the model would predict with high accuracy the CDRSB score and diagnosis over time after the first few visits and with the least expensive feature subset. Therefore, we built a table of dataframes to explore the impact of (1) number of visits considered and (2) feature subset selection. The table of dataframes has dimensions $m \times n$ where $m$ is equal to $23$ (maximum number of visits of the study with increments of about $6$ months) and $n$ is equal to $4$ (different subsets of feature) that we split in the following way:
+A critical objective of the final model is early detection. Ideally, the model would predict with high accuracy the CDRSB score and diagnosis over time after the first few visits and with the least expensive feature subset. Therefore, we built a table of dataframes to explore the impact of (1) number and timing of visits after the baseline, and (2) feature subset selection. During the study, the smallest increment of time between visits was approximately $6$ months. Given that longest any patient ever remained in the study was $11$ years, there are a maximum of $23$ possible half-year increments at which data might be present. The table of dataframes has dimensions $m \times n$ where $m$ is equal to $23$ and $n$ is equal to $4$ (different subsets of feature) that we split in the following way:
 
 1. Demographics + Cognitive Tests
 2. Demographics + Cognitive Tests + Ecog Tests
 3. Demographics + Cognitive Tests + Imaging Data
 4. Demographics + Cognitive Tests + Ecog Test + Imaging Data
+
+These categories were chosen based on the trends of missing data as well as their cost to acquire the data. The overall cost of the subset selection increases from subset $1$ to $4$.
 
 Let us prepare the split of the different feature subsets.
 
@@ -317,7 +318,7 @@ To assess the performance of the different models to predict the slope of the CD
 
 
 ```python
-def run_model(X,y,assessment,seed=40,size=0.3,kernel_opt = False,weight=0,max_depth = 3,bandwidth=0.5,n_estimators=10):
+def run_model(X,y,assessment,seed=40,size=0.3,kernel_opt = False,weight=0,max_depth = 3,bandwidth=0.5,n_estimators=100):
     ''' 
     **Train model with RF regressor on the CDRSB slope and return different scores
     * param[in] X predictor matrix
@@ -376,8 +377,8 @@ def run_model(X,y,assessment,seed=40,size=0.3,kernel_opt = False,weight=0,max_de
     cdrsb_error_test  = mean_squared_error(assessment_test['final_cdrsb'],cdrsb_pred_test)
 
     #Get diagnosis accuracy score
-    diagnosis_pred_train = ['CN' if i <0.5 else 'MCI' if i < 2.5 else 'AD' for i in cdrsb_pred_train]
-    diagnosis_pred_test = ['CN' if i  <0.5 else 'MCI' if i < 2.5 else 'AD' for i in cdrsb_pred_test]
+    diagnosis_pred_train = ['CN' if i <0.5 else 'MCI' if i < 4. else 'AD' for i in cdrsb_pred_train]
+    diagnosis_pred_test = ['CN' if i  <0.5 else 'MCI' if i < 4. else 'AD' for i in cdrsb_pred_test]
     diagnosis_error_train = accuracy_score(assessment_train['final_diagnosis'],diagnosis_pred_train)
     diagnosis_error_test  = accuracy_score(assessment_test['final_diagnosis'],diagnosis_pred_test)
                                  
@@ -403,7 +404,11 @@ def GridSearch(max_depths,weights,bandwidths,n_estimators,subset,year):
     best_params = []
     for max_depth in max_depths:
         for weight in weights:
-            for bandwidth in bandwidths:
+            if weight == 0:
+                bws = [0]
+            else:
+                bws = bandwidths
+            for bandwidth in bws:
                 for n_estimator in n_estimators:
                     _,_,R2,_,cdrsb_error_test,_,diagnosis_accuracy=\
                     run_model(Xs[subset][year],ys[subset][year],assessments[subset][year],\
@@ -416,7 +421,7 @@ def GridSearch(max_depths,weights,bandwidths,n_estimators,subset,year):
                         
     return best_cdrsb_error, best_diagnosis_accuracy,best_R2,best_params
 
-def plotModelPerformance(ax,title,years,train_score,test_score,mse_train,mse_test,acc_train,acc_test):
+def plotModelPerformance(ax,title,years,train_score,test_score,mse_train,mse_test,acc_train,acc_test,includey=False):
     ''' 
     **Plot model performance (R2 of CDRSB slope, MSE of future CDRSB, and accuracy of diagnosis)
       as a function of the number of years for a fixed feature subset
@@ -432,9 +437,9 @@ def plotModelPerformance(ax,title,years,train_score,test_score,mse_train,mse_tes
     #Plot the train and test score vs time
     ax[0].plot(years,train_score,'b-',label='train')
     ax[0].plot(years,test_score,'r-',label='test')
-    ax[0].set_xlabel('Time [years]')
-    ax[0].set_ylabel(r'$R^2$')
-    ax[0].set_title(r'$R^2$ Slope ('+title+')')
+    if includey:
+        ax[0].set_ylabel(r'$R^2$')
+    ax[0].set_title(title)
     ax[0].set_xlim(0,10)
     ax[0].set_ylim(0.2,1)
     ax[0].legend()
@@ -442,9 +447,8 @@ def plotModelPerformance(ax,title,years,train_score,test_score,mse_train,mse_tes
     #Plot the train and test mse vs number of visits
     ax[1].plot(years,cdrsb_error_train,'b-',label='train')
     ax[1].plot(years,cdrsb_error_test,'r-',label='test')
-    ax[1].set_xlabel('Time [years]')
-    ax[1].set_ylabel('MSE')
-    ax[1].set_title(r'MSE CDRSB ('+title+')')
+    if includey:
+        ax[1].set_ylabel('MSE')
     ax[1].set_xlim(0,10)
     ax[1].set_ylim(0,10)
     ax[1].legend()
@@ -453,8 +457,8 @@ def plotModelPerformance(ax,title,years,train_score,test_score,mse_train,mse_tes
     ax[2].plot(years,diagnosis_error_train,'b-',label='train')
     ax[2].plot(years,diagnosis_error_test,'r-',label='test')
     ax[2].set_xlabel('Time [years]')
-    ax[2].set_ylabel('Accuracy')
-    ax[2].set_title('Accuracy ('+title+')')
+    if includey:
+        ax[2].set_ylabel('Accuracy')
     ax[2].set_xlim(0,10)
     ax[2].set_ylim(0.4,1.0)
     ax[2].legend()
@@ -489,7 +493,7 @@ def plotHeatMap(mat,ax,title,reverse=False):
     
     # Label ticks
     ax.set_yticklabels(["{} years".format(y) for y in years])
-    ax.set_xticklabels(["Subset {}".format(i) for i in range(4)])
+    ax.set_xticklabels(["Subset {}".format(i+1) for i in range(4)])
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
          rotation_mode="anchor")
     
@@ -526,62 +530,17 @@ for i in range(n_subset):
 
 ### Baseline Model
 
-We first start investigating how well we can predict the CDRSB slope, the future CDRSB, and the future diagnosis with the original dataframes without hyper-parameter tuning. We can first plot the relation between the model scores ($R^2$ on the CDRSB slope, MSE on the final CDRSB, and accuracy on the final diagnosis) as a function of the number of visits for different feature subsets.
+We first start investigating how well we can predict the CDRSB slope, the future CDRSB, and the future diagnosis with the original dataframes without hyper-parameter tuning. Given the high performance of Random Forest in the EDA, we decided to limit our analysis to this model, moving forward. We can first plot the relation between the model scores ($R^2$ on the CDRSB slope, MSE on the final CDRSB, and accuracy on the final diagnosis) as a function of the timing of the follow up visits for different feature subsets.
 
 
 
 ```python
-''''BASELINE MODELS'''
 
-#Loop over time and the subsets
-n_years = [10,10,8,7]
-subsets = [0,1,2,3]
 
-#Set up the figure
-fig = plt.figure(figsize=(15,10))
-axs = []
-axs_subs = []
-for i in range(len(subsets)):
-    axs.append(fig.add_subplot(3,4,3*i+1))
-    axs.append(fig.add_subplot(3,4,3*i+2))
-    axs.append(fig.add_subplot(3,4,3*i+3))
 
-axs_subs.append([axs[0],axs[4],axs[8]])
-axs_subs.append([axs[1],axs[5],axs[9]])
-axs_subs.append([axs[2],axs[6],axs[10]])
-axs_subs.append([axs[3],axs[7],axs[11]])
 
-#Run model and plot figure
-for f in subsets:
-    years = [0,0.5]+list(np.linspace(1,n_years[f],n_years[f]))
-    test_score = np.zeros(len(years))
-    train_score = np.zeros(len(years))
-    cdrsb_error_train = np.zeros(len(years))
-    cdrsb_error_test = np.zeros(len(years))
-    diagnosis_error_train = np.zeros(len(years))
-    diagnosis_error_test = np.zeros(len(years))
-    for i,s in enumerate(years):
-        a,train_score[i],test_score[i],cdrsb_error_train[i],cdrsb_error_test[i],\
-        diagnosis_error_train[i],diagnosis_error_test[i]=\
-        run_model(Xs[f][s],ys[f][s],assessments[f][s])
-    title = 'subset'+str(f)
-    axs_subs[f] = plotModelPerformance(axs_subs[f],title,years,train_score,test_score,cdrsb_error_train,\
-                               cdrsb_error_test,diagnosis_error_train,diagnosis_error_test)
-plt.tight_layout()
-plt.suptitle('Baseline Models Based on Time and Subset Selection',fontsize='20')
-plt.subplots_adjust(top=0.9);
 ```
 
-
-
-![png](Models_combined_files/Models_combined_29_0.png)
-
-
-In the Figure above, the model scores only go up until $10$ years for subsets $0$ and $1$ and up until $8$ and $7$ years for subsets $2$ and $3$ due to missing data.
-
-!!!!!!!!!!!!!!!!!!!SOME ANALYSIS IS MISSING HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-In additon, we can plot the heat map of the model scores as a function of the selected subset and the time in years.
 
 
 
@@ -609,10 +568,46 @@ for i in range(4):
             
 #Plot heatmaps
 fig,axes = plt.subplots(ncols=3,nrows=1,figsize=(15,10))
-plotHeatMap(cdrsb_error_mat,axes[0],'CDRSB Mean-Squared-Error',reverse=True)
-plotHeatMap(R2_mat,axes[1],'$R^2$ of CDRSB Slope')
+plotHeatMap(R2_mat,axes[0],'$R^2$ of CDRSB Slope')
+plotHeatMap(cdrsb_error_mat,axes[1],'CDRSB Mean-Squared-Error',reverse=True)
 plotHeatMap(diagnosis_accuracy_mat,axes[2],'Final Diagnosis Accuracy')
 plt.suptitle('Baseline Heatmaps',fontsize=20);
+```
+
+
+
+![png](Models_combined_files/Models_combined_30_0.png)
+
+
+The figure above plots heatmaps of the $3$ different model scores ($R^2$ of the overall CDRSB slope, MSE of the final CDRSB prediction, and accuracy of the final diagnosis prediction) as a function of the follow-up visit timing and feature subset selection. The color scale is set for each metric so that green is desirable.
+
+We do not see any clear trends with the different predictor subsets. This might imply that we do not need to collect the more expensive metrics (e.g. imaging data from subset $3$).
+
+Looking first at the $R^2$ score, we see an increase of performance over time. This is due to the fact that we are including an engineered feature (current CDRSB slope estimate) that asymptotically approaches our response variable (overall CDRSB slope) as time progresses.
+
+For the subsequent plots (MSE of the final CDRSB predition and accuracy of the final diagnosis prediction), we observe a peak in performance when approximately $3-4$ years of data are included in the model. The reason behind this local maximum comes from the fact that we are attempting to extrapolate the progression of each patient forward in time to their final visit. Given our initial EDA, we hypothesize that this $3$ to $4$ year window corresponds to a peak in patients leaving the study. This would imply that for the majority of patients we are extrapolating on a very short timespan which would explain the higher accuracy.  We can investigate this in more details by looking at the histogram of the duration for which the patients remained in the study.
+
+
+
+```python
+'''HISTOGRAM AND ESTIMATE KERNEL OF FINAL TIME'''
+
+#Kernel density
+kde = KernelDensity(kernel='gaussian', bandwidth=1.).fit(assessments[2][0.]['final_time'].values.reshape(-1,1))
+t = np.linspace(0,10,100)
+tt = np.exp(kde.score_samples(t.reshape(-1,1)))
+
+#Plot hist. + kernel
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.hist(assessments[0][0.]['final_time'],density=True,bins=range(12),align='left')
+ax.set_xlabel('Final Time [year]')
+ax.set_ylabel('Frequency')
+ax.set_title('Histogram of Final Time');
+ax.set_xticks(range(11))
+ax.plot(t,tt,'-',label='Kernel Estimate')
+ax.legend(['Kernel Estimate','Histogram']);
+ax.grid(False);
 ```
 
 
@@ -620,101 +615,44 @@ plt.suptitle('Baseline Heatmaps',fontsize=20);
 ![png](Models_combined_files/Models_combined_32_0.png)
 
 
-!!!!!!!!!!!!!!!!!!!SOME ANALYSIS IS MISSING HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+As we can see here, there is in fact a peak around the $3$ to $4$ window which confirms our hypothesis. Thus, this explains the peak in the model prediction scores. We will explore different ways to eliminate this bias in the following section.
 
 ### Improving Baseline Model: Adding Sample Weight
 
-In order to improve the performance of the baseline model, we have to account first for the high correlation between the response variable overall CDRSB-slope and the predictor current CDRSB-slope when the patient is approaching his final visit. In fact, at the final visit, the predictor current CDRSB-slope will be exactly equal to the response variable overall  CDRSB-slope. This will lead to massive over-fitting on the training set.
+In order to improve the performance of the baseline model, we have to account first for the high correlation between the response variable (overall CDRSB-slope) and our engineered predictor (current CDRSB-slope estimate thus far) when the patient is approaching his final visit. In fact, at the final visit, the engineered predictor will be exactly equal to the response variable. This will lead to massive over-fitting on the training set, over emphasizing the importance of the engineered predictor.
 
-Therefore, we introduce sample weight to the random forest model. The array of sample weights are modeled as follows:
+As discussed in the Introduction, one way to deal with this longitudinal correlation is to weight observations based on the duration for which each patient remained in the study. Therefore, we introduce sample weight to the random forest model. The array of sample weights are modeled as follows:
 
 $$ w_i = \left(1 - \frac{t_i}{f_i}\right)^p,$$
  
-where $w_i$ corresponds to the $i^{th}$ weight to apply to the train response variable, $t_i$ is the current time of the patient's visit, $f_i$ is the final time of the patient's history, and $p$ is a power. The sample weight varies from $0$ when $t_i = f_i$ to $1$ when $t_i = 0$. The exponent $p$ becomes an hyper-parameter that we will explore in a later section.
+where $w_i$ corresponds to the $i^{th}$ weight to apply to the train response variable, $t_i$ is the current time of the patient's visit, $f_i$ is the final time of the patient's history, and $p$ is a power. The sample weight varies from $0$ when $t_i = f_i$ to $1$ when $t_i = 0$. Therefore, the sample weight is decreased as time progresses, helping to counter act the increase correlation between the response variable and our engineered longitudinal feature. The exponent $p$ becomes an hyper-parameter that we will explore in a later section.
 
-Another problem we have to deal with is the discrepancy between patients' history. The Figure below highlights a big drop in the number of patients involved in the study after $4$ years. We also overlay on the histogram the estimae kernel density function.
+As discussed in the previous section, another problem we have to deal with is the discrepancy between when patients dropped out of the study. This is highlighted in the histogram above where we also overlay an estimated kernel density function.
 
-
-
-```python
-'''HISTOGRAME AND ESTIMATE KERNEL OF FINAL TIME'''
-
-#Kernel density
-kde = KernelDensity(kernel='gaussian', bandwidth=.5).fit(assessments[2][0.]['final_time'].values.reshape(-1,1))
-t = np.linspace(0,10,100)
-tt = np.exp(kde.score_samples(t.reshape(-1,1)))
-
-#Plot hist. + kernel
-fig = plt.figure()
-ax = fig.add_subplot(111)
-ax.hist(assessments[0][0.]['final_time'],density=True)
-ax.set_xlabel('Final Time [year]')
-ax.set_ylabel('Frequency')
-ax.set_title('Histogram of Final Time');
-ax.plot(t,tt,'-',label='Kernel Estimate')
-ax.legend();
-```
-
-
-
-![png](Models_combined_files/Models_combined_36_0.png)
-
-
-A way to deal with this issue is to apply sample weight based on the kernel density estimate. To do this, we update our sample weight function to
+To deal with this issue, we apply sample weight based on the kernel density estimate. To do this, we update our sample weight function to
 
 $$ w_i = \frac{\left(1 - \frac{t_i}{f_i}\right)^p}{k(f_i)},$$
 
 where $k(f_i)$ is the value of the kernel estimate varying with the final time of the $i^{th}$ observation in the dataframe. This introduces a new hyper-parameter $b$ corresponding to the bandwidth of the kernel density function.
 
-The sample weight adjustments are implemented in the function $\texttt{run_model}$. Similar to the baseline models, we can plot the heatmaps of the model performance for fixed hyper-parameters. We choose a weight power of $p = 2$ and a bandwidth of $k=2$.
+These sample weight coefficients are implemented in the function $\texttt{run_model}$.
 
 
 
 ```python
-'''HEATMAPS OF THE WEIGHTED MODELS'''
 
-#Declare properties to map
-cdrsb_error_mat = np.zeros((12,4))
-R2_mat = np.zeros((12,4))
-diagnosis_accuracy_mat = np.zeros((12,4))
-years = [0,0.5]+list(np.linspace(1,10,10))
 
-#Hyper-parameters
-p = 2
-b = 0.5
 
-#Compute property matrices
-for i in range(4):
-    for j,y in enumerate(years):
-        numNonFinalPatients = sum((assessments[i][y]['TIME'] - assessments[i][y]['final_time'])!=0)
-        if numNonFinalPatients > 10:
-            _,_,R2_mat[j][i],_,cdrsb_error_mat[j][i],\
-            _,diagnosis_accuracy_mat[j][i]=\
-            run_model(Xs[i][y],ys[i][y],assessments[i][y],weight=p,bandwidth=b)
-        else:
-            cdrsb_error_mat[j][i] = np.NaN
-            R2_mat[j][i] = np.NaN
-            diagnosis_accuracy_mat[j][i] = np.NaN
             
-#Plot heatmaps
-fig,axes = plt.subplots(ncols=3,nrows=1,figsize=(15,10))
-plotHeatMap(cdrsb_error_mat,axes[0],'CDRSB Mean-Squared-Error',reverse=True)
-plotHeatMap(R2_mat,axes[1],'$R^2$ of CDRSB Slope')
-plotHeatMap(diagnosis_accuracy_mat,axes[2],'Final Diagnosis Accuracy')
-plt.suptitle('Heatmaps of Weighted Models',fontsize=20);
 ```
-
-
-
-![png](Models_combined_files/Models_combined_38_0.png)
 
 
 ### Improving Baseline Model: Hyper-Parameter Tuning
 
-To further improve the model perofmance, we perform hyper-parameter tuning. We will tune $4$ different hyper-parameters:
+With Random Forest and our implemented sample weight coefficients, we now have now introduced a number of hyper-parameters that can be tuned to improve model performance. We will tune the following $4$ different hyper-parameters with the tested values in parentheses.
 
-1. Random Forest Tree Maximum Depth (2,5,10,20)
-2. Weight Power (1,2,3)
+1. Random Forest Tree Maximum Depth (3,5,10,20)
+2. Weight Power (0,1,2,3)
 3. Kernel Estimate Bandwidth (0.25,0.5,0.75)
 4. Random Forest Number of Trees (10,50,100)
 
@@ -726,8 +664,8 @@ To perform the hyper-parameter tuning, we have implemented the function $\texttt
 '''HYPER-PARAMETERS TUNING'''
 
 #Declare bound of hp
-max_depths = [2,5,10,20]
-weights = [1,2,3]
+max_depths = [3,5,10,20]
+weights = [0,1,2,3]
 bandwidths = [0.25, 0.5, 0.75]
 n_estimators = [10,50,100]
 
@@ -771,6 +709,16 @@ with open('grid_search.pkl','wb') as f:
 ```
 
 
+
+
+```python
+import pickle
+with open('grid_search.pkl','rb') as f:
+    best_cdrsb_error,best_diagnosis_accuracy,best_R2,best_params =pickle.load(f)
+
+```
+
+
 We can plot the heatmaps of the model performance for tuned hyper-parameters.
 
 
@@ -785,16 +733,60 @@ diagnosis_accuracy_mat = np.zeros((12,4))
 
 #Compute property matrices
 for i in range(4):
-    for j,v in enumerate(visits):
-        cdrsb_error_mat[j,i] = best_cdrsb_error[i][v]
-        R2_mat[j,i] = best_R2[i][v]
-        diagnosis_accuracy_mat[j,i] = best_diagnosis_accuracy[i][v]
+    for j,y in enumerate(years):
+        cdrsb_error_mat[j,i] = best_cdrsb_error[i][y]
+        R2_mat[j,i] = best_R2[i][y]
+        diagnosis_accuracy_mat[j,i] = best_diagnosis_accuracy[i][y]
 
 #Plot heatmaps
 fig,axes = plt.subplots(ncols=3,nrows=1,figsize=(15,10))
-plotHeatMap(cdrsb_error_mat,axes[0],'CDRSB Mean-Squared-Error',reverse=True)
-plotHeatMap(R2_mat,axes[1],'$R^2$ of CDRSB Slope')
+plotHeatMap(R2_mat,axes[0],'$R^2$ of CDRSB Slope')
+plotHeatMap(cdrsb_error_mat,axes[1],'CDRSB Mean-Squared-Error',reverse=True)
 plotHeatMap(diagnosis_accuracy_mat,axes[2],'Final Diagnosis Accuracy')
 plt.suptitle('Tuned Model Heatmaps',fontsize=20);
 ```
 
+
+
+![png](Models_combined_files/Models_combined_44_0.png)
+
+
+As we can see from the heatmaps of the models with tuned hyper-parameters, we have reduced the peak in the MSE of the CDRSB score prediction and the final diagnosis prediction accuracy. This indicates that our weighting coefficients have helped compensate for the bias in our dataset. Furthermore, based on a coarse hyper-parameter tuning, we were able to slightly improve our prediction results.
+
+From the heatmaps of the tuned models, we can identify one of the most promissing models with respect to final diagnosis accuracy. While this model only uses data from a single $6$-month follow-up visit and the most minimal subset of predictors, it is still associated with $85.2$% accuracy on the prediciton of the diagnosis. Thus, it presents evident appeal to the medical community given its low cost and potential for early detection.
+
+For this particular, we examine the feature importance in the figure below.
+
+
+
+```python
+'''FEATURE IMPORTANCES'''
+   
+#Run model based on best hyper-parameters
+y_best = 0.5
+s_best = 0
+best_model,_,_,_,_,_,_,=\
+run_model(Xs[s_best][y_best],ys[s_best][y_best],\
+          assessments[s_best][y_best],max_depth=best_params[s_best][y_best][0],\
+         weight=best_params[s_best][y_best][1],\
+         kernel_opt=True,n_estimators=best_params[s_best][y_best][3])
+
+#Plot feature importance on hbar
+f_imp = best_model.feature_importances_
+f_name = Xs[s_best][y_best].columns.values
+f_imp,f_name = zip(*sorted(zip(f_imp,f_name)))
+plt.figure(figsize=(5,6))
+plt.barh(f_name,f_imp,color='k')
+plt.grid(False)
+plt.tick_params(labelsize=10)
+plt.title('Feature Importance');
+```
+
+
+
+![png](Models_combined_files/Models_combined_47_0.png)
+
+
+As expected, the most important feature is the slope estimate thus far after $0.5$ year. Similarly to the correlation result in the EDA, we see that FAQ is an important feature in predicting final diagnosis. At the other end of the spectrum, race and marital status are not important features in the model. In addition, interestingly the current diagnosis is not important to predicting future disease progression. This indicates that knowing one's current disease status along does not tell how a patient will progress over time.
+
+ADD FALSE/TRUE POSITIVE/NEGATIVE STUFF
