@@ -1,14 +1,5 @@
----
-nav_include: 3
-title: Models
-notebook: Models_combined.ipynb
----
 
-## Contents
-{:.no_toc}
-*  
-{: toc}
-
+# Models
 
 
 
@@ -22,7 +13,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import AdaBoostRegressor, BaggingRegressor, GradientBoostingRegressor, RandomForestRegressor 
 from sklearn.ensemble import AdaBoostClassifier, BaggingClassifier, GradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, mean_squared_error
+from sklearn.metrics import accuracy_score, mean_squared_error, confusion_matrix
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.neighbors.kde import KernelDensity
 
@@ -36,6 +27,7 @@ matplotlib.rcParams['figure.figsize'] = (13.0, 6.0)
 
 from time import clock
 
+# Aesthetic settings
 from IPython.display import display
 pd.set_option('display.max_columns', 999)
 pd.set_option('display.width', 500)
@@ -45,10 +37,6 @@ sns.set_context('talk')
 from collections import defaultdict
 ```
 
-
-    C:\Users\david\Anaconda3\lib\site-packages\sklearn\ensemble\weight_boosting.py:29: DeprecationWarning: numpy.core.umath_tests is an internal NumPy module and should not be imported. It will be removed in a future NumPy release.
-      from numpy.core.umath_tests import inner1d
-    
 
 ## Modeling Longitudinal Component of the Data
 
@@ -74,6 +62,7 @@ df = pd.read_csv(f)
 ```python
 '''CLEAN THE DATABASE'''
 
+# Work on a copy of the raw df
 df_dummy = df.copy()
 
 #Create a new cleaned df
@@ -115,8 +104,10 @@ df_clean['Marital_status'] = pd.Categorical(df_dummy.PTMARRY)
 df_clean['APOE4'] = pd.Categorical(df_dummy.APOE4)
 
 #FDG (PET scan marker)
+# df_clean['FDG'] = df_dummy.FDG
 
 #Create a list of predictors for which we want to calculate delta
+# REMOVE SOFTWARE AND FIELD STRENGHT
 remainingColumns = ['ADAS11', 'ADAS13', 'MMSE', 'RAVLT_immediate',
  'RAVLT_learning', 'RAVLT_forgetting', 'RAVLT_perc_forgetting', 'FAQ', 'MOCA',
  'EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', 'EcogPtPlan', 'EcogPtOrgan',
@@ -243,9 +234,9 @@ for i,row in df_clean.iterrows():
 ```
 
 
-    C:\Users\david\Anaconda3\lib\site-packages\ipykernel_launcher.py:26: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
+    C:\Users\kb1ud\Anaconda2\envs\py36\lib\site-packages\ipykernel_launcher.py:26: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
     To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
-    C:\Users\david\Anaconda3\lib\site-packages\ipykernel_launcher.py:34: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
+    C:\Users\kb1ud\Anaconda2\envs\py36\lib\site-packages\ipykernel_launcher.py:34: FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
     To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
     
 
@@ -267,6 +258,7 @@ Let us prepare the split of the different feature subsets.
 ```python
 '''FEATURE SUBSETS'''
 
+# split up different groups of columns
 imaging_columns = ['ICV','MidTemp','Fusiform','Entorhinal','WholeBrain','Hippocampus','Ventricles'] #removed FDG!
 ecog_columns = ['EcogPtMem', 'EcogPtLang', 'EcogPtVisspat', 'EcogPtPlan',
                 'EcogPtOrgan', 'EcogPtDivatt', 'EcogPtTotal', 'EcogSPMem',
@@ -280,6 +272,7 @@ for v in visits:
 standard_columns = list(set(df_clean.columns.values) - set(imaging_columns) - set(ecog_columns) \
                         - set(slope_columns) - set(final_columns))
 
+# subsets of columns to assemble for different models
 subsets = []
 subsets.append(standard_columns + final_columns)
 subsets.append(standard_columns + final_columns + ecog_columns)
@@ -295,6 +288,7 @@ We can now create the dictionary of dataframes to explore the impact of the time
 ```python
 '''DICTIONARY OF DFS'''
 
+# compile into a useful dictionary structure of dataframes for use later
 dfs = defaultdict(dict)
 visits_new = np.linspace(0.,11.,23)
 n_subsets = len(subsets)
@@ -534,10 +528,40 @@ We first start investigating how well we can predict the CDRSB slope, the future
 
 
 ```python
+# ''''BASELINE MODELS'''
 
+# #Loop over time and the subsets
+# n_years = [10,10,8,7]
+# subsets = [0,1,2,3]
 
+# #Set up the figure
+# fig,axs = plt.subplots(nrows=3,ncols=4,sharex=True,sharey='row',figsize=(15,10))
 
+# axs_subs = []
+# axs_subs.append([axs[0,0],axs[1,0],axs[2,0]])
+# axs_subs.append([axs[0,1],axs[1,1],axs[2,1]])
+# axs_subs.append([axs[0,2],axs[1,2],axs[2,2]])
+# axs_subs.append([axs[0,3],axs[1,3],axs[2,3]])
 
+# #Run model and plot figure
+# for f in subsets:
+#     years = [0,0.5]+list(np.linspace(1,n_years[f],n_years[f]))
+#     test_score = np.zeros(len(years))
+#     train_score = np.zeros(len(years))
+#     cdrsb_error_train = np.zeros(len(years))
+#     cdrsb_error_test = np.zeros(len(years))
+#     diagnosis_error_train = np.zeros(len(years))
+#     diagnosis_error_test = np.zeros(len(years))
+#     for i,s in enumerate(years):
+#         a,train_score[i],test_score[i],cdrsb_error_train[i],cdrsb_error_test[i],\
+#         diagnosis_error_train[i],diagnosis_error_test[i]=\
+#         run_model(Xs[f][s],ys[f][s],assessments[f][s])
+#     title = 'subset '+str(f)
+#     axs_subs[f] = plotModelPerformance(axs_subs[f],title,years,train_score,test_score,cdrsb_error_train,\
+#                                cdrsb_error_test,diagnosis_error_train,diagnosis_error_test,includey=(f==0))
+# plt.tight_layout()
+# plt.suptitle('Baseline Models Based on Time and Subset Selection',fontsize='20')
+# plt.subplots_adjust(top=0.9);
 ```
 
 
@@ -639,10 +663,37 @@ These sample weight coefficients are implemented in the function $\texttt{run_mo
 
 
 ```python
+# '''HEATMAPS OF THE WEIGHTED MODELS'''
 
+# #Declare properties to map
+# cdrsb_error_mat = np.zeros((12,4))
+# R2_mat = np.zeros((12,4))
+# diagnosis_accuracy_mat = np.zeros((12,4))
+# years = [0,0.5]+list(np.linspace(1,10,10))
 
+# #Hyper-parameters
+# p = 2
+# b = .5
 
+# #Compute property matrices
+# for i in range(4):
+#     for j,y in enumerate(years):
+#         numNonFinalPatients = sum((assessments[i][y]['TIME'] - assessments[i][y]['final_time'])!=0)
+#         if numNonFinalPatients > 10:
+#             _,_,R2_mat[j][i],_,cdrsb_error_mat[j][i],\
+#             _,diagnosis_accuracy_mat[j][i]=\
+#             run_model(Xs[i][y],ys[i][y],assessments[i][y],weight=p,bandwidth=b,kernel_opt=True)
+#         else:
+#             cdrsb_error_mat[j][i] = np.NaN
+#             R2_mat[j][i] = np.NaN
+#             diagnosis_accuracy_mat[j][i] = np.NaN
             
+# #Plot heatmaps
+# fig,axes = plt.subplots(ncols=3,nrows=1,figsize=(15,10))
+# plotHeatMap(R2_mat,axes[0],'$R^2$ of CDRSB Slope')
+# plotHeatMap(cdrsb_error_mat,axes[1],'CDRSB Mean-Squared-Error',reverse=True)
+# plotHeatMap(diagnosis_accuracy_mat,axes[2],'Final Diagnosis Accuracy')
+# plt.suptitle('Heatmaps of Weighted Models',fontsize=20);
 ```
 
 
@@ -678,21 +729,21 @@ best_params = defaultdict(dict)
 years = [0,0.5]+list(np.linspace(1,10,10))
 
 #Perform grid search
-t0 = clock()
-for subset in range(4):
-    for y in years:
-        numNonFinalPatients = sum((assessments[subset][y]['TIME'] - assessments[subset][y]['final_time'])!=0)
-        if  numNonFinalPatients > 10:
-            best_cdrsb_error[subset][y], best_diagnosis_accuracy[subset][y], \
-            best_R2[subset][y], best_params[subset][y] = \
-            GridSearch(max_depths,weights,bandwidths,n_estimators,subset,y)
-            print((subset,y,clock()-t0,'Successful'))
-        else:
-            best_cdrsb_error[subset][y] = np.NaN
-            best_diagnosis_accuracy[subset][y] = np.NaN
-            best_R2[subset][y] = np.NaN
-            best_params[subset][y] = np.NaN
-            print((subset,y,clock()-t0,'Too few people'))
+# t0 = clock()
+# for subset in range(4):
+#     for y in years:
+#         numNonFinalPatients = sum((assessments[subset][y]['TIME'] - assessments[subset][y]['final_time'])!=0)
+#         if  numNonFinalPatients > 10:
+#             best_cdrsb_error[subset][y], best_diagnosis_accuracy[subset][y], \
+#             best_R2[subset][y], best_params[subset][y] = \
+#             GridSearch(max_depths,weights,bandwidths,n_estimators,subset,y)
+#             print((subset,y,clock()-t0,'Successful'))
+#         else:
+#             best_cdrsb_error[subset][y] = np.NaN
+#             best_diagnosis_accuracy[subset][y] = np.NaN
+#             best_R2[subset][y] = np.NaN
+#             best_params[subset][y] = np.NaN
+#             print((subset,y,clock()-t0,'Too few people'))
 ```
 
 
@@ -702,15 +753,23 @@ for subset in range(4):
 '''SAVE ENVIRONMENT'''
 
 #Grid search is long so we save results ...
-import pickle
-with open('grid_search.pkl','wb') as f:
-    pickle.dump([best_cdrsb_error,best_diagnosis_accuracy,best_R2,best_params],f)
+# import pickle
+# with open('grid_search.pkl','wb') as f:
+#     pickle.dump([best_cdrsb_error,best_diagnosis_accuracy,best_R2,best_params],f)
 ```
 
 
 
 
+
+    'SAVE ENVIRONMENT'
+
+
+
+
+
 ```python
+'''LOAD ENVIRONMENT'''
 import pickle
 with open('grid_search.pkl','rb') as f:
     best_cdrsb_error,best_diagnosis_accuracy,best_R2,best_params =pickle.load(f)
@@ -754,7 +813,7 @@ As we can see from the heatmaps of the models with tuned hyper-parameters, we ha
 
 From the heatmaps of the tuned models, we can identify one of the most promissing models with respect to final diagnosis accuracy. While this model only uses data from a single $6$-month follow-up visit and the most minimal subset of predictors, it is still associated with $85.2$% accuracy on the prediciton of the diagnosis. Thus, it presents evident appeal to the medical community given its low cost and potential for early detection.
 
-For this particular, we examine the feature importance in the figure below.
+For this particular model, we examine the feature importance in the figure below.
 
 
 
@@ -788,4 +847,49 @@ plt.title('Feature Importance');
 
 As expected, the most important feature is the slope estimate thus far after $0.5$ year. Similarly to the correlation result in the EDA, we see that FAQ is an important feature in predicting final diagnosis. At the other end of the spectrum, race and marital status are not important features in the model. In addition, interestingly the current diagnosis is not important to predicting future disease progression. This indicates that knowing one's current disease status along does not tell how a patient will progress over time.
 
-ADD FALSE/TRUE POSITIVE/NEGATIVE STUFF
+### Exploration of Model Misclassification Rates
+
+Finally, we want to investigate the number of false positives/negatives in our final diagnosis predictions to better understand the types of errors that our model makes. Thus, we generate a confusion matrix of the best-performing model evaluated on the test set.
+
+
+
+```python
+'''PLOT CONFUSION MATRIX OF FINAL DIAGNOSIS PREDICTIONS'''
+
+# Generate final diagnosis predictions
+X = Xs[s_best][y_best]
+y = ys[s_best][y_best]
+assessment = assessments[s_best][y_best]
+_, X_test, _, y_test, _, assessment_test = train_test_split(X, y, assessment, test_size=0.3, random_state=40,\
+                                        stratify=X[['Diagnosis_CN','Diagnosis_MCI']])
+cdrsb_pred_test  = \
+    [i+s*t for i,s,t in zip(assessment_test['base_cdrsb'],best_model.predict(X_test),assessment_test['final_time'])]
+diagnosis_pred_test = ['CN' if i  <0.5 else 'MCI' if i < 4. else 'AD' for i in cdrsb_pred_test]
+
+
+# Generate and plot confusion matrix
+cm = confusion_matrix(assessment_test['final_diagnosis'],diagnosis_pred_test,labels=['CN','MCI','AD'])
+cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+plt.imshow(cm,cmap=plt.get_cmap('Blues'))
+plt.grid(False)
+for i in range(3):
+    for j in range(3):
+        if i==j:
+            col = 'w'
+        else:
+            col = 'k'
+        plt.text(i, j, "{:0.3f}".format(cm[j,i]),
+                           ha="center", va="center", color=col,fontsize=20)
+plt.xticks([0,1,2],['CN','MCI','AD'],fontsize=20)
+plt.yticks([0,1,2],['CN','MCI','AD'],fontsize=20)
+plt.title('Confusion Matrix of Final Diagnosis',fontsize=20)
+plt.xlabel('Predicted',fontsize=20)
+plt.ylabel('True',fontsize=20);
+```
+
+
+
+![png](Models_combined_files/Models_combined_51_0.png)
+
+
+As we can see from the above table, the model generally performs very similarly across the three classes of data, exhibiting ~$82$% to ~$90$% accuracy on each of the diagnoses. In medical studies, one must take special care to minimize the rate of false negatives, since this results in patients not receiving the proper care they need. We see that our model never misclassified patients who actually had AD as CN, or vice versa. There were some false positives/negatives involving the MCI diagnosis (in particular, the model seems to be over-predicting MCI across all three classes), however, this is less of a severe issue than confusing CN and AD. The most obvious area for improvement highlighed in this table is the $18.2$% false negative rate where AD patients were incorrectly classified as MCI. 
