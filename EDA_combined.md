@@ -675,7 +675,7 @@ display(df[col].head()
 </div>
 
 
-First, let us take a look at the columns. Let us see how many we have and what are their names.
+First, let us take a look at the columns. Let us see how many we have and what they are.
 
 
 
@@ -713,7 +713,7 @@ print(col)
      'Month_bl' 'Month' 'M' 'update_stamp']
     
 
-As we can see the columns name are mostly abbreviations that do not make a lot of sense to someone not in the field. Luckily for us, there exist a dictionnary file $\texttt{ADNIMERGE_DICT.csv}$ that provides the definition of the columns field name and also some notes on how to interpret the field name. Let us create a dictionnary dataframe and investigate the meaning behind some of the columns name. 
+As we can see, the column names are mostly abbreviations that do not make a lot of sense to someone not in the field. Luckily for us, there exist a dictionnary file $\texttt{ADNIMERGE_DICT.csv}$ that provides the definition of the columns field name and also some notes on how to interpret the field name. Let us create a dictionnary dataframe and investigate the meaning behind some of the column names. 
 
 
 
@@ -759,7 +759,7 @@ for i in range(n_p):
     
     
 
-We have many interesting columns. We have a few keys $\texttt{RID}$ (Roster ID), $\texttt{PTID}$ (Patient ID), and $\texttt{VISCODE}$ (Visit ID) that are not useful for regression/classification, but very important to link different databases together. Other columns such as $\texttt{DX_bl}$ and $\texttt{DX}$ representing the baseline diagnotic and the diagnostic status could be response variables that change in time from one visit to another visit. Columns such as $\texttt{AGE}$ (age at baseline), $\texttt{PTGENDER}$ (sex) or $\texttt{PTRACCAT}$ (race) are easy to understand, but some others $\texttt{MOCA}$ (MOCA), $\texttt{RAVLT_immediate}$ (RAVLT 5 sum) remain hard to understand.
+We have many interesting columns. We have a few keys, $\texttt{RID}$ (Roster ID), $\texttt{PTID}$ (Patient ID), and $\texttt{VISCODE}$ (Visit ID), that are not useful for regression/classification, but very important to link different databases together. Other columns such as $\texttt{DX_bl}$ and $\texttt{DX}$ representing the baseline diagnotic and the diagnostic status could be response variables that change in time from one visit to another visit. Columns such as $\texttt{AGE}$ (age at baseline), $\texttt{PTGENDER}$ (sex) or $\texttt{PTRACCAT}$ (race) are easy to understand, but some others $\texttt{MOCA}$ (MOCA), $\texttt{RAVLT_immediate}$ (RAVLT 5 sum) remain hard to understand. 
 
 Let us now look at the rows and count how many observations we have.
 
