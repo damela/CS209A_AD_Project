@@ -4,6 +4,8 @@ title: EDA
 notebook: EDA_combined.ipynb
 ---
 
+In this section, we perform exploratory data analysis (EDA) where we load and clean the ADNI dataset, explore the missingness, choices of response variables and predictors, and examine how well we can predict the chosen response variable in a single visit based on the chosen predictors in the same visit, without taking longitudinal data into account.
+
 ## Contents
 {:.no_toc}
 *  
