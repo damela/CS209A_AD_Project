@@ -387,7 +387,7 @@ def plotHeatMap(mat,ax,title,reverse=False):
 
 ### Prepare data for training and testing
 
-To prepare the data for training and testing, we have to create the predictor matrices $Xs$ as well as the response variable vectors $ys$ corresponding to the different dataframes. We also need to one-hot encode the predictor matrices and to save important predictors for models assesssment, e.g. $\texttt{base_cdrsb}$, $\texttt{final_cdrsb}$, $\texttt{final_diagnosis}$, $\texttt{final_time}$, $\texttt{TIME}$, $\texttt{ID}$.
+To prepare the data for training and testing, we have to create the predictor matrices $Xs$ as well as the response variable vectors $ys$ corresponding to the different dataframes. We also need to one-hot encode the predictor matrices and to save important predictors for model assesssment, e.g. $\texttt{base_cdrsb}$, $\texttt{final_cdrsb}$, $\texttt{final_diagnosis}$, $\texttt{final_time}$, $\texttt{TIME}$, $\texttt{ID}$.
 
 
 
@@ -488,15 +488,15 @@ As we can see here, there is in fact a peak around the $3$ to $4$ window which c
 
 ### Improving Baseline Model: Adding Sample Weight
 
-In order to improve the performance of the baseline model, we have to account first for the high correlation between the response variable (overall CDRSB-slope) and our engineered predictor (current CDRSB-slope estimate thus far) when the patient is approaching his final visit. In fact, at the final visit, the engineered predictor will be exactly equal to the response variable. This will lead to massive over-fitting on the training set, over emphasizing the importance of the engineered predictor.
+In order to improve the performance of the baseline model, we have to account first for the high correlation between the response variable (overall CDRSB-slope) and our engineered predictor (current CDRSB-slope estimate thus far) when a patient is approaching his/her final visit. In fact, at the final visit, the engineered predictor will be exactly equal to the response variable. This will lead to massive over-fitting on the training set, over emphasizing the importance of the engineered predictor.
 
-As discussed in the Introduction, one way to deal with this longitudinal correlation is to weight observations based on the duration for which each patient remained in the study. Therefore, we introduce sample weight to the random forest model. The array of sample weights are modeled as follows:
+As discussed in the Introduction, one way to deal with this longitudinal correlation is to weight observations based on the duration for which each patient remained in the study. Therefore, we introduce sample weights to the random forest model. The array of sample weights are modeled as follows:
 
 $$ w_i = \left(1 - \frac{t_i}{f_i}\right)^p,$$
  
-where $w_i$ corresponds to the $i^{th}$ weight to apply to the train response variable, $t_i$ is the current time of the patient's visit, $f_i$ is the final time of the patient's history, and $p$ is a power. The sample weight varies from $0$ when $t_i = f_i$ to $1$ when $t_i = 0$. Therefore, the sample weight is decreased as time progresses, helping to counter act the increase correlation between the response variable and our engineered longitudinal feature. The exponent $p$ becomes an hyper-parameter that we will explore in a later section.
+where $w_i$ corresponds to the $i^{th}$ weight to apply to the train response variable, $t_i$ is the current time of the patient's visit, $f_i$ is the final time of the patient's history, and $p$ is a power. The sample weight varies from $0$ when $t_i = f_i$ to $1$ when $t_i = 0$. Therefore, the sample weight is decreased as time progresses, helping to counteract the increased correlation between the response variable and our engineered longitudinal feature. The exponent $p$ becomes an hyper-parameter that we will explore in a later section.
 
-As discussed in the previous section, another problem we have to deal with is the discrepancy between when patients dropped out of the study. This is highlighted in the histogram above where we also overlay an estimated kernel density function.
+As discussed in the previous section, another problem we have to deal with is the discrepancy between when different patients dropped out of the study. This is highlighted in the histogram above where we also overlay an estimated kernel density function.
 
 To deal with this issue, we apply sample weight based on the kernel density estimate. To do this, we update our sample weight function to
 
@@ -509,7 +509,7 @@ These sample weight coefficients are implemented in the function $\texttt{run_mo
 
 ### Improving Baseline Model: Hyper-Parameter Tuning
 
-With Random Forest and our implemented sample weight coefficients, we now have now introduced a number of hyper-parameters that can be tuned to improve model performance. We will tune the following $4$ different hyper-parameters with the tested values in parentheses.
+With Random Forest and our implemented sample weight coefficients, we have now introduced a number of hyper-parameters that can be tuned to improve model performance. We will tune the following $4$ different hyper-parameters with the tested values in parentheses.
 
 1. Random Forest Tree Maximum Depth (3,5,10,20)
 2. Weight Power (0,1,2,3)
@@ -521,7 +521,7 @@ To perform the hyper-parameter tuning, we have implemented the function $\texttt
 
 
 ```python
-'''HYPER-PARAMETERS TUNING'''
+'''HYPER-PARAMETER TUNING'''
 
 #Declare bound of hp
 max_depths = [3,5,10,20]
@@ -591,7 +591,7 @@ plt.suptitle('Tuned Model Heatmaps',fontsize=20);
 
 As we can see from the heatmaps of the models with tuned hyper-parameters, we have reduced the peak in the MSE of the CDRSB score prediction and the final diagnosis prediction accuracy. This indicates that our weighting coefficients have helped compensate for the bias in our dataset. Furthermore, based on a coarse hyper-parameter tuning, we were able to slightly improve our prediction results.
 
-From the heatmaps of the tuned models, we can identify one of the most promissing models with respect to final diagnosis accuracy. While this model only uses data from a single $6$-month follow-up visit and the most minimal subset of predictors, it is still associated with $85.2$% accuracy on the prediciton of the diagnosis. Thus, it presents evident appeal to the medical community given its low cost and potential for early detection.
+From the heatmaps of the tuned models, we can identify one of the most promissing models with respect to final diagnosis accuracy. While this model only uses data from a single $6$-month follow-up visit and the most minimal subset of predictors, it still achieves $85.2$% accuracy on the prediciton of the diagnosis. Thus, it presents evident appeal to the medical community given its low cost and potential for early detection.
 
 For this particular model, we examine the feature importance in the figure below.
 

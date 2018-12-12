@@ -777,7 +777,7 @@ print('The number of observations is',n_row)
     The number of observations is 13017
     
 
-Let see if that corresponds to the number of patients in the study.
+Let us see if that corresponds to the number of patients in the study.
 
 
 
